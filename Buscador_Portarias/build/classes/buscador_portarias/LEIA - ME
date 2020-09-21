@@ -1,0 +1,40 @@
+/*DETAIL DE USAR ESSA SISTEMA  LEIA BEM SE NAO ENTENDI MANDA EMAIL*/
+    // dest = caminho de salva os arquivos 
+    //localiz = caminho de onde voce salvo arquivos
+    // collection = indica o que voce esta querendo colectar dados 
+
+    // Atingo = siginfica que voce esta querendo collectar dados de site IFRS IBiruuba Antigo
+    // Atual = siginfica que voce esta querendo collectar dados de site IFRS IBiruba Atual
+    // Official = siginfica que voce esta querendo collectar dados de site IFRS bento-gonçalves Official
+    // UFRGS = siginfica que voce esta querendo collectar dados de site Univercidade federal Rio Grande de Sul
+
+
+    // covertTXT = esta dizendo que voce quer converter PDF para TXT
+    // convertXML = indica que voce esta querendo converter TXT para XML
+    // -index = opção para indixar o sistema indexar os arquivos XML
+    // -search =  isso indica sistema para ele buscar dizendo consulta o o dados que voce precisa
+
+
+OBSERVAÇAO  : 
+
+quando voce percebe que tem uma expreção assim  :  args[i+1]  isso diz que to pegando dados que acompanho o pedido 
+
+
+EXEMPLES DE EXCUÇAO DE PROJETO  :
+
+*Nao coloca aspa simples so esta li para ti mostra onde coloca informação
+
+*PARA COLLECÇÃO : 
+    java -jar "caminho de onde fica a jar de projeto"  dest 'onde vai salvar dados' localiz 'onde voce ja salvo dados'  collection 'nome do site para colectar'
+
+*PARA CONVERÇÃO   TXT  :
+    java -jar "caminho de onde fica a jar de projeto"  dest 'onde vai salvar dados' localiz 'onde voce ja salvo dados'  covertTXT
+
+*PARA CONVERÇÃO   XML  :
+    java -jar "caminho de onde fica a jar de projeto"  dest 'onde vai salvar dados' localiz 'onde voce ja salvo dados'  covertXML
+
+*PARA INDEXAÇÃO :
+    java -jar "caminho de onde fica a jar de projeto"  dest 'onde vai salvar dados' localiz 'onde voce ja salvo dados'  -index
+
+*PARA CONSULTA :
+    java -jar "caminho de onde fica a jar de projeto"  dest 'onde vai salvar dados' localiz 'onde voce ja salvo dados'  -search 'palavra para consultar'

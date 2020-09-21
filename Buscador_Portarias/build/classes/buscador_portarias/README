@@ -1,0 +1,40 @@
+/ * DETAIL TO USE THIS SYSTEM PLEASE READ WELL IF I DON'T UNDERSTAND MANDA EMAIL * /
+    // dest = path to save files
+    // localiz = path where you save files
+    // collection = indicates what you are trying to collect data
+
+    // Atingo = means that you are looking to collect site data from IFRS IBiruuba Antigo
+    // Atual = means that you are looking to collect site data IFRS IBiruba Atual
+    // Official = means you want to collect data from IFRS bento-gonçalves website
+    // UFRGS = means that you are looking to collect site data Federal University Rio Grande de Sul
+
+
+    // covertTXT = is saying that you want to convert PDF to TXT
+    // convertXML = indicates that you are wanting to convert TXT to XML
+    // -index = option to let the system index XML files
+    // -search = this indicates the system for it to search by saying query or the data you need
+
+
+NOTE  :
+
+when you realize you have an expression like this: args [i + 1] it says that I'm taking data that accompany the order
+
+
+PROJECT EXECUTION EXAMPLES:
+
+* Do not put a single quotation mark so this read for you shows where you put information
+
+* FOR COLLECTION:
+    java -jar "path where the project jar is located" dest 'where you will save data' localiz 'where you have already saved data' collection 'name of the site to collect'
+
+* FOR TXT CONVERTING:
+    java -jar "path where the project jar is located" dest 'where you will save data' localize 'where you have already saved data' covertTXT
+
+* FOR XML CONVERSION:
+    java -jar "path where the project jar is located" dest 'where you will save data' localize 'where you have already saved data' covertXML
+
+* FOR INDEX:
+    java -jar "path where the project jar is located" dest 'where you will save data' localizes 'where you have already saved data' -index
+
+*FOR CONSULT :
+    java -jar "path where the project jar is located" dest 'where you will save data' localizes 'where you have already saved data' -search 'word to query'

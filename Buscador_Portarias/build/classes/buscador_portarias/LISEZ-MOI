@@ -1,0 +1,41 @@
+
+/ * DÉTAIL POUR UTILISER CE SYSTÈME VEUILLEZ LIRE BIEN SI VOUS NE COMPRENDS PAS ENVOIE EMAIL * /
+    // dest = chemin pour enregistrer les fichiers
+    // localiz = chemin où vous deja enregistrez les fichiers
+    // collection = indique ce que vous voulez de collecter des données
+
+    // Atingo = signifie que vous cherchez à collecter des données de site à partir d'IFRS IBiruuba Antigo
+    // Atual = signifie que vous cherchez à collecter des données de site IFRS IBiruba Atual
+    // Officiel = signifie que vous souhaitez collecter des données du site Web IFRS bento-gonçalves
+    // UFRGS = signifie que vous cherchez à collecter des données de site Université fédérale Rio Grande de Sul
+
+
+    // covertTXT = indique que vous souhaitez convertir un PDF en TXT
+    // convertXML = indique que vous souhaitez convertir TXT en XML
+    // -index = option pour le système indexer les fichiers XML
+    // -search = cela indique le système pour qu'il recherche en disant la requête ou les données dont vous avez besoin
+
+
+REMARQUE  :
+
+quand vous réalisez que vous avez une expression comme celle-ci: args [i + 1] cela dit que je prends des données qui accompagnent la commande
+
+
+EXEMPLES D'EXÉCUTION DE PROJETS:
+
+* Ne mettez pas un guillemet simple pour que cette lecture pour vous montre où vous mettez les informations
+
+* POUR LA COLLECTION:
+    java -jar "chemin où se trouve le fichier jar du projet" dest 'où vous allez enregistrer les données' localiz 'où vous avez déjà sauvegardé les données' collection 'nom du site à collecter'
+
+* POUR LA CONVERSION TXT:
+    java -jar "chemin où se trouve le fichier jar du projet" dest 'où vous allez enregistrer les données' localize 'là où vous avez déjà sauvegardé les données' covertTXT
+
+* POUR LA CONVERSION XML:
+    java -jar "chemin où se trouve le fichier jar du projet" dest 'où vous allez enregistrer les données' localize 'là où vous avez déjà sauvegardé les données' covertXML
+
+* POUR INDEX:
+    java -jar "chemin où se trouve le fichier jar du projet" dest 'où vous allez enregistrer les données' localise 'là où vous avez déjà sauvegardé les données' -index
+
+* POUR CONSULTER:
+    java -jar "chemin où se trouve le fichier jar du projet" dest 'où vous allez enregistrer les données' localise 'là où vous avez déjà sauvegardé les données' -search 'mot à interroger'
