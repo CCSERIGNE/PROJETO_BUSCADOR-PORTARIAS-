@@ -19,6 +19,13 @@ public class VarivaisGlobais {
     public static  boolean ADD_Index;
     public static  boolean UPDATE;
     
+    public static String getDestinario(){
+        return DEST;
+    }
+    
+    public static String getLocaliz(){
+        return SRCARCH;
+    }
     
     public static void SetDestinario( String destinario){
         DEST = destinario;

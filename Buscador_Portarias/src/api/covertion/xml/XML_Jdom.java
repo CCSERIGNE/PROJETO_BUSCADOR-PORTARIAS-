@@ -25,11 +25,10 @@ import org.jdom2.output.XMLOutputter;
 /**
  *
  * @author Serigne Khassim Mbaye 
- * Estudante Ciênça da computação
- * Email : serignekhassim@gmail.com
- * 19-09-2020 -  IBIRUBA - RS IFRS
+ * Estudante Ciênça da computação Email :
+ * serignekhassim@gmail.com 
+ * 19-09-2020 - IBIRUBA - RS IFRS
  */
-
 public class XML_Jdom {
     //Antigo  Atual Official  UFRGS 
 
@@ -37,26 +36,29 @@ public class XML_Jdom {
 //    public static final String DEST = "C:\\Users\\sergi\\Documents\\PDFextraid\\Julho_2020_pdfs\\XML\\" + Pasta + "\\";
 //    public static final String SRC = "C:\\Users\\sergi\\Documents\\PDFextraid\\Julho_2020_pdfs\\TXT\\" + Pasta + "\\";
 //    public static final String SRCARCH = "C:\\Users\\sergi\\Documents\\PDFextraid\\Julho_2020_pdfs\\TXT\\" + Pasta + "";
-    
     String date;
     static String nomeArquivo;
     String siteArquivo;
-    int numPort;
+    static int numPort;
     String IdPortaria = "";
     BufferedReader in;
     StreamResult out;
     String DatPort = "";
 
     public static void Open_DirArchive() throws IOException {
+
         System.setProperty("user.dir", VarivaisGlobais.SRCARCH);
         File dir = new File(System.getProperty("user.dir"));
 
         String childs[] = dir.list();
+        int n = 0;
         for (String SplitnomeArchiv : childs) {
+
             String nomeTXT[] = SplitnomeArchiv.split(".txt");
             String SRC_F = VarivaisGlobais.SRCARCH + "" + SplitnomeArchiv.toString().trim();
             String DEST_F = VarivaisGlobais.DEST + "" + nomeTXT[0].toString().trim() + ".xml";
             nomeArquivo = nomeTXT[0];
+            numPort = n++;
             File file = new File(DEST_F);
             file.getParentFile().mkdirs();
             new XML_Jdom().begin(SRC_F, DEST_F);
@@ -69,21 +71,22 @@ public class XML_Jdom {
             FileWriter savefile = new FileWriter(new File(dest));
             String str;
             boolean escreve = false;
-            Random random = new Random();
-            numPort = random.nextInt(10);
+//            Random random = new Random();
+//            numPort = random.nextInt(10);
             String NameArchiv = nomeArquivo;
-            NameArchiv = NameArchiv.replace( "_DOISpont__baraduplas_", "://");
-            NameArchiv = NameArchiv.replace( "_DOISpont_", ":");
+            NameArchiv = NameArchiv.replace("_DOISpont__baraduplas_", "://");
+            NameArchiv = NameArchiv.replace("_DOISpont_", ":");
             NameArchiv = NameArchiv.replace("_baraduplas_", "//");
             NameArchiv = NameArchiv.replace("barra", "/");
             Element elemDoc = new Element("Document");
             elemDoc.setAttribute("id", "" + numPort + "");
             elemDoc.setAttribute("nome_arquivo", "" + nomeArquivo + "");
-            elemDoc.setAttribute("site", "https://www1.ufrgs.br/sistemas/sde/gerencia-documentos/index.php/publico/ExibirPDF?documento="+NameArchiv+"");
+            elemDoc.setAttribute("site", "https://www1.ufrgs.br/sistemas/sde/gerencia-documentos/index.php/publico/ExibirPDF?documento=" + NameArchiv + "");
             Document Doc = new Document(elemDoc);
 
             ArrayList<String> linhas = new ArrayList<>();
             int fimt = 0;
+
             while ((str = in.readLine()) != null) {
                 Element portaria = new Element("portaria");
                 Element text = new Element("text");
@@ -99,9 +102,9 @@ public class XML_Jdom {
                             String[] dat;
                             if (str.contains(",")) {
                                 dat = str.split(",");
-                                if (dat[0].toString().contains(" ")){
+                                if (dat[0].toString().contains(" ")) {
                                     String[] getN = dat[0].toString().split(" ");
-                                    IdPortaria =getN[(getN.length-1)];
+                                    IdPortaria = getN[(getN.length - 1)];
                                 }
                                 DatPort = dat[1].toString().trim();
                             } else if (str.contains("de")) {
@@ -123,24 +126,23 @@ public class XML_Jdom {
                                     DatPort = dat[m].toString().trim();
                                 }
                             }
-                            if(str.contains("Nº")){
+                            if (str.contains("Nº")) {
                                 dat = str.split("Nº");
                                 String[] proxSplit = dat[1].toString().split("de");
-                                IdPortaria = proxSplit[0].toString().trim();  
+                                IdPortaria = proxSplit[0].toString().trim();
                             }
 
                         }
                     }
                 }
-
                 if (escreve == true) {
                     Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
                             + "|Pró-Reitora|Pró-Reitor|Diretor Geral|Diretor-Geral|Vice-Pró-Reitora|Vice-Pró-Reitor|Vice-Superintendente|VICE-REITOR"
                             + "|Vice-Superintendente|Reitor|VICE-REITORA|Diretor|Diretora da Faculdade");
                     Matcher rege_2 = p_2.matcher(str);
                     if (rege_2.lookingAt()) {
-                         portaria.setAttribute("ID", IdPortaria);
-                         portaria.setAttribute("data", ""+DatPort+"");
+                        portaria.setAttribute("ID", IdPortaria);
+                        portaria.setAttribute("data", "" + DatPort + "");
                         escreve = false;
                         linhas.add(str);
                         String dados = linhas.toString().replace("[", "");
@@ -156,7 +158,6 @@ public class XML_Jdom {
                     linhas.add(str);
                 }
             }
-
             XMLOutputter saveXML = new XMLOutputter();
             try {
                 saveXML.output(Doc, savefile);
