@@ -65,14 +65,12 @@ public class Buscador_Portarias {
                     case "-index":
                         First_Project_Indexing.InicializacaoIndex();
                         break;
-                    case "-search":
+                    case "-query":
                         First_Project_Search.BuscarPortaias(args[i + 1].trim());
                         break;
                 }
             }
         }
-        System.out.println("LOCALIZ--- " + VarivaisGlobais.getLocaliz());
-        System.out.println("DEST------ " + VarivaisGlobais.getDestinario());
     }
 
 }

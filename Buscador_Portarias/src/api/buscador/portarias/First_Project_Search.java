@@ -47,7 +47,7 @@ public class First_Project_Search {
         }
         
         String queryStringget = "";
-        queryStringget = "edimar";
+        queryStringget = "silva";
 
         for (int i = 0; i < args.length; i++) {
             if ("-query".equals(args[i])) {
@@ -66,9 +66,10 @@ public class First_Project_Search {
         int repeat = 0;
         boolean raw = false;
         String queryString = queryStringPes;
-        int hitsPerPage = 50;
+        int hitsPerPage = 300;
 
-        index = VarivaisGlobais.SRCARCH; // TROCAR 
+        //index = VarivaisGlobais.SRCARCH; // Caso execute a partir do Buscador_Porarias
+        index = "C://Users//Igor//Documents//PDFextraid//Indexado//";//Caminho dos itens indexados
 
         IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
         IndexSearcher searcher = new IndexSearcher(reader);
@@ -176,17 +177,25 @@ public class First_Project_Search {
                 String dat = doc.get("date");
                 String dados = doc.get("contents");
                 if (path != null) {
+                    byte pathBits[] = path.getBytes("UTF-8");
+                    path = new String(pathBits, "ISO-8859-1");
                     Myobjects.put("nameDoc", path);
                 }
                 if (num != null) {
+                    byte pathBits[] = num.getBytes("UTF-8");
+                    num = new String(pathBits, "ISO-8859-1");
                     Myobjects.put("numPort", num);
                 }
 
                 if (dat != null) {
+                    byte pathBits[] = dat.getBytes("UTF-8");
+                    dat = new String(pathBits, "ISO-8859-1");
                     Myobjects.put("datePort", dat);
                 }
 
                 if (dados != null) {
+                    byte pathBits[] = dados.getBytes("UTF-8");
+                    dados = new String(pathBits, "ISO-8859-1");
                     Myobjects.put("conteudo", dados);
                 }
 
