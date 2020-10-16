@@ -81,7 +81,7 @@ public class XML_Jdom {
             Element elemDoc = new Element("Document");
             elemDoc.setAttribute("id", "" + numPort + "");
             elemDoc.setAttribute("nome_arquivo", "" + nomeArquivo + "");
-            elemDoc.setAttribute("site", "https://www1.ufrgs.br/sistemas/sde/gerencia-documentos/index.php/publico/ExibirPDF?documento=" + NameArchiv + "");
+            elemDoc.setAttribute("site", NameArchiv + "");
             Document Doc = new Document(elemDoc);
 
             ArrayList<String> linhas = new ArrayList<>();
