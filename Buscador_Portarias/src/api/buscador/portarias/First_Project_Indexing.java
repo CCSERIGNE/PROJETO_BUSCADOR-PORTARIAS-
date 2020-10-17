@@ -129,8 +129,11 @@ public class First_Project_Indexing {
         doc.add(pathField_3);
         doc.add(new LongPoint("modified", lastModified));
         InputStream inputStream = new ByteArrayInputStream(Conteudo.getBytes(Charset.forName("UTF-8")));
+        
         Field Field_4 = new TextField("contents", new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
         doc.add(Field_4);
+        String dados = doc.get("contents");
+        System.out.println(dados);
 
         if (write.getConfig().getOpenMode() == IndexWriterConfig.OpenMode.CREATE) {
             //se o index e novo criar documento relaciona

@@ -32,9 +32,9 @@ public class PDF2TXT {
 
         String childs[] = dir.list();
         for (String SplitnomeArchiv : childs) {
-            String nomeTXT[] = SplitnomeArchiv.split(".pdf");
+            String nomeTXT = SplitnomeArchiv.replaceFirst(".pdf", "");
             String SRC_F = VarivaisGlobais.SRCARCH + "" + SplitnomeArchiv.toString().trim();
-            String DEST_F = VarivaisGlobais.DEST + "" + nomeTXT[0].toString().trim() + ".txt";
+            String DEST_F = VarivaisGlobais.DEST + "" + nomeTXT.toString().trim() + ".txt";
             File file = new File(DEST_F);
             file.getParentFile().mkdirs();
             LerArquivo(SRC_F , DEST_F);

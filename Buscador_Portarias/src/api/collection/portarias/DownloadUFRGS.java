@@ -38,14 +38,21 @@ public class DownloadUFRGS {
             getHttps = webFile;
         }
         
-        getHttps = getHttps.replace("ç", "%C3%A7");getHttps = getHttps.replace("ã", "%C3%A3");getHttps = getHttps.replace("Ç", "%C3%87");
-        getHttps = getHttps.replace("---", "-%E2%80%93-");getHttps = getHttps.replace("Diário", "Di%C3%A1rio");getHttps = getHttps.replace("º", "%C2%BA");
-        System.out.println(" receita : "+getHttps);
-        NameArchiv = NameArchiv.replace( "/" , "_");NameArchiv = NameArchiv.replace("Diário", "Diario");NameArchiv = NameArchiv.replace("º", "_");
-        NameArchiv = NameArchiv.replace("ç", "c");NameArchiv = NameArchiv.replace("ã", "a");NameArchiv = NameArchiv.replaceAll("Ç", "c");
-        NameArchiv = NameArchiv.replace("---", "_");
+        NameArchiv = getHttps;
+        NameArchiv = NameArchiv.replace(":", "_DOISpont_");
+        NameArchiv = NameArchiv.replace("//", "_baraduplas_");
+        NameArchiv = NameArchiv.replace("/", "barra");
+
+        getHttps = getHttps.replace("ç", "%C3%A7");
+        getHttps = getHttps.replace("ã", "%C3%A3");
+        getHttps = getHttps.replace("Ç", "%C3%87");
+        getHttps = getHttps.replace("---", "-%E2%80%93-");
+        getHttps = getHttps.replace("Diário", "Di%C3%A1rio");
+        getHttps = getHttps.replace("º", "%C2%BA");
+        System.out.println(" receita : " + getHttps);
         
-        String localpath = VarivaisGlobais.DEST+"" + NameArchiv + "_Portaria_UFRGS"  + ".pdf";
+          
+        String localpath = VarivaisGlobais.DEST+"" + NameArchiv + ".pdf";
         
         NumbeArchiv++;
         Downloader d = new Downloader();
