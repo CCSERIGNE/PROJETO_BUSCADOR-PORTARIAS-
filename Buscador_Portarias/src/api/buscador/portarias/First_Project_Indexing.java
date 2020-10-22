@@ -131,11 +131,10 @@ public class First_Project_Indexing {
 //        InputStream inputStream = new ByteArrayInputStream(Conteudo.getBytes(Charset.forName("UTF-8")));
 //        Field Field_4 = new TextField("contents", new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
             
-        byte[] germanBytes = Conteudo.getBytes(StandardCharsets.UTF_8);
- 
-        String asciiEncodedString = new String(germanBytes, StandardCharsets.UTF_8);
+        byte[] conteudoBytes = Conteudo.getBytes(StandardCharsets.UTF_8);
+        Conteudo = new String(conteudoBytes, StandardCharsets.UTF_8);
         
-        Field Field_4 = new TextField("contents", asciiEncodedString, Field.Store.YES);
+        Field Field_4 = new TextField("contents", Conteudo, Field.Store.YES);
         doc.add(Field_4);
         String dados = doc.get("contents");
         System.out.println(dados);
