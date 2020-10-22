@@ -47,7 +47,7 @@ public class First_Project_Search {
         }
         
         String queryStringget = "";
-        queryStringget = "silva";
+        queryStringget = "edimar";
 
         for (int i = 0; i < args.length; i++) {
             if ("-query".equals(args[i])) {
@@ -66,10 +66,10 @@ public class First_Project_Search {
         int repeat = 0;
         boolean raw = false;
         String queryString = queryStringPes;
-        int hitsPerPage = 300;
+        int hitsPerPage = 50;
 
-        //index = VarivaisGlobais.SRCARCH; // Caso execute a partir do Buscador_Porarias
         index = "C://Users//Igor//Documents//PDFextraid//Indexado//";//Caminho dos itens indexados
+
 
         IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
         IndexSearcher searcher = new IndexSearcher(reader);
@@ -190,6 +190,7 @@ public class First_Project_Search {
                 if (dados != null) {
                     Myobjects.put("conteudo", dados);
                 }
+
                 moo.put(Myobjects);
             }
 
