@@ -66,9 +66,10 @@ public class First_Project_Search {
         int repeat = 0;
         boolean raw = false;
         String queryString = queryStringPes;
-        int hitsPerPage = 50;
+        int hitsPerPage = 10;
 
-        index = "C://Users//Igor//Documents//PDFextraid//Indexado//";//Caminho dos itens indexados
+        index = "C:\\Users\\Igor\\Documents\\PDFextraid\\Indexado";//Caminho dos itens indexados
+        // index = "/var/www/indexado";//Caminho dos itens indexados
 
 
         IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));

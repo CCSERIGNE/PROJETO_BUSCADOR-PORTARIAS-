@@ -2,6 +2,7 @@ package api.buscador.portarias;
 
 import static api.buscador.portarias.ConvertXML_doc.getdocXML;
 import api.variaveis.globais.VarivaisGlobais;
+import static api.variaveis.globais.VarivaisGlobais.DEST;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -54,6 +55,16 @@ public class First_Project_Indexing {
         String indexPath = VarivaisGlobais.DEST;
         String docsPath = VarivaisGlobais.SRCARCH;
         boolean create = false;
+        
+        // Exclui tudo no diretório destino
+        File folder = new File(indexPath);
+        if (folder.isDirectory()) {
+            File[] sun = folder.listFiles();
+            for (File toDelete : sun) {
+                toDelete.delete();
+            }
+        }       
+        
         if (VarivaisGlobais.ADD_Index) {
             create = true;
         } else if (VarivaisGlobais.UPDATE) {
@@ -95,17 +106,16 @@ public class First_Project_Indexing {
             List<Element> lista = Documents.getChildren();
             List<Element> portarias = Documents.getChildren("portaria");
             for (Element e : portarias) {
-                String ID = "";
+                String[] ids = {""};
                 if (e.getAttributeValue("ID").contains(",")) {
-                    String[] ids = e.getAttributeValue("ID").split(",");
-                    ID = ids[0].toString().replace(",", "").trim();
+                    ids = e.getAttributeValue("ID").split(",");
                 } else if (e.getAttributeValue("ID").contains("DO")) {
-                    String[] ids = e.getAttributeValue("ID").split("DO");
-                    ID = ids[0].toString().replace("DO", "").trim();
+                    ids = e.getAttributeValue("ID").split("DO");
                 } else if (e.getAttributeValue("ID").contains("DE")) {
-                    String[] ids = e.getAttributeValue("ID").split("DE");
-                    ID = ids[0].toString().replace("DE", "").trim();
+                    ids = e.getAttributeValue("ID").split("DE");
                 }
+                String ID = ids[0];
+                
                 IndexarXML(writer, Documents.getAttributeValue("site"), e.getChildText("text"), Files.getLastModifiedTime(docDir).toMillis(),
                         ID, e.getAttributeValue("data"));
             }
@@ -136,15 +146,15 @@ public class First_Project_Indexing {
         
         Field Field_4 = new TextField("contents", Conteudo, Field.Store.YES);
         doc.add(Field_4);
-        String dados = doc.get("contents");
-        System.out.println(dados);
+//        String dados = doc.get("contents");
+//        System.out.println(dados);
 
-        if (write.getConfig().getOpenMode() == IndexWriterConfig.OpenMode.CREATE) {
-            //se o index e novo criar documento relaciona
+//        if (write.getConfig().getOpenMode() == IndexWriterConfig.OpenMode.CREATE) {
+//            //se o index e novo criar documento relaciona
             write.addDocument(doc);
-        } else {
-            //se documento existe atualiza
-            write.updateDocument(new Term("path", link), doc);
-        }
+//        } else {
+//            se documento existe atualiza
+//            write.updateDocument(new Term("path", link), doc);
+//        }
     }
 }

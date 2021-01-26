@@ -10,6 +10,7 @@ import api.buscador.portarias.First_Project_Search;
 import api.collection.portarias.DownloadAntigo;
 import api.collection.portarias.DownloadAtual;
 import api.collection.portarias.DownloadOficial;
+import api.collection.portarias.DownloadOficialNovo;
 import api.collection.portarias.DownloadUFRGS;
 import api.convertion.txt.PDF2TXT;
 import api.covertion.xml.XML_Jdom;
@@ -53,6 +54,10 @@ public class Buscador_Portarias {
                                 break;
                             case "UFRGS":
                                 DownloadUFRGS.BaixarPortariasUFRGS();
+                                break;
+                                
+                            case "Novo":
+                                DownloadOficialNovo.BaixoPortariasNovo();
                                 break;
                         }
                         break;
