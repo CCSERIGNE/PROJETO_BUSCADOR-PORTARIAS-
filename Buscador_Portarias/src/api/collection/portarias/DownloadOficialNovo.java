@@ -7,10 +7,12 @@ package api.collection.portarias;
 
 import api.variaveis.globais.VarivaisGlobais;
 import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 /**
  *
@@ -34,52 +36,77 @@ public class DownloadOficialNovo {
         } else {
             getHttps = webFile;
         }
-
         NameArchiv = getHttps;
         NameArchiv = NameArchiv.replace(":", "_DOISpont_");
         NameArchiv = NameArchiv.replace("//", "_baraduplas_");
         NameArchiv = NameArchiv.replace("/", "barra");
+        NameArchiv = NameArchiv.replace("?", "interrogacao");
 
-        getHttps = getHttps.replace("Ã§", "%C3%A7");
-        getHttps = getHttps.replace("Ã£", "%C3%A3");
-        getHttps = getHttps.replace("Ã‡", "%C3%87");
+        getHttps = getHttps.replace("ç", "%C3%A7");
+        getHttps = getHttps.replace("ã", "%C3%A3");
+        getHttps = getHttps.replace("Ç", "%C3%87");
         getHttps = getHttps.replace("---", "-%E2%80%93-");
-        getHttps = getHttps.replace("DiÃ¡rio", "Di%C3%A1rio");
-        getHttps = getHttps.replace("Âº", "%C2%BA");
+        getHttps = getHttps.replace("Diário", "Di%C3%A1rio");
+        getHttps = getHttps.replace("º", "%C2%BA");
+        getHttps = getHttps.replace("?ano", "/?ano");
+        System.out.println(" receita : " + getHttps);
+        System.out.println(" PDF : " + NameArchiv);
 
         String localpath = VarivaisGlobais.DEST + "" + NameArchiv + ".pdf";
+
         NumbeArchiv++;
         Downloader d = new Downloader();
         return d.downloadUrl(getHttps, localpath);
     }
 
-    public static void BaixoPortariasNovo() throws IOException {
-        // TODO code application logic here
-        String LinkAntigo = "https://sippag-web.ifrs.edu.br/portarias/";
-        Document doc = Jsoup.connect(LinkAntigo).get();
-        String title = doc.title();
-        Elements links = doc.select("a[href]");
-        System.out.println(" : " + title);
-        for (Element link : links) {
-            //PEGAR OS DOCUMENTOS
+    public static void printJsonObject(JSONObject jsonObj) {
+        VarivaisGlobais.SetDestinario("C:\\Users\\Igor\\Documents\\PDFs\\Novo\\");
+        for (Object key : jsonObj.keySet()) {
+            //based on you key types
+            String keyStr = (String) key;
+            Object keyvalue = jsonObj.get(keyStr);
 
-            if (link.text().matches("Boletins de Serviço .*") || link.text().matches("Boletim de Serviço .*")) {
-                System.out.println(" links  : " + link.text());
-                if (link.attr("abs:href").endsWith("pdf")) {
-                    System.out.println("link _ 1: " + link.attr("abs:href")); //abs:href pega a URL completa
-                } else {
-                    Document doc02 = Jsoup.connect(link.attr("abs:href")).get();
-                    Elements links02 = doc02.select("a[href]");
-                    for (Element link02 : links02) {
-                        if (link02.attr("abs:href").endsWith("pdf")) {
-                            String webFile = link02.attr("abs:href");
-                            DownloadOficialNovo dow = new DownloadOficialNovo();
-                            dow.PreparedDownload(webFile, link02.text(), 0);
-                            System.out.println("link : " + link02.attr("abs:href")); //abs:href pega a URL completa
-                        }
+            //for nested objects iteration if required
+            if (keyvalue instanceof JSONObject) {
+                System.out.println(((JSONObject) keyvalue).get("results").getClass());
+                JSONArray json = (JSONArray) ((JSONObject) keyvalue).get("results");
+                if (json.get(0) instanceof JSONObject) {
+                    System.out.println(json.get(0));
+                    for (Object object : json) {
+                        String url = ((JSONObject) object).get("url").toString();
+                        JSONObject assinatura = (JSONObject) ((JSONObject) object).get("assinatura");
+                        String nome = assinatura.get("interessadoNome").toString();
+                        DownloadOficialNovo dow = new DownloadOficialNovo();
+                        DownloadOficialNovo.PreparedDownload(url, nome, 0);
                     }
                 }
             }
+        }
+    }
+
+    public static void BaixoPortariasNovo() throws IOException {
+        String LinkAtual = "https://sippag-web.ifrs.edu.br/api/v1/portaria?ano=2021&page=0&size=200";
+        Response resp = Jsoup.connect(LinkAtual).method(Connection.Method.GET)
+                .header("Host", "sippag-web.ifrs.edu.br")
+                .header("Connection", "keep-alive")
+                .header("Pragma", "no-cache")
+                .header("Cache-Control", "no-cache")
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36")
+                .header("DNT", "1")
+                .header("authorization", "null null")
+                .header("content-type", "application/json")
+                .header("Accept", "*/*")
+                .header("Sec-Fetch-Site", "same-origin")
+                .header("Sec-Fetch-Mode", "cors")
+                .header("Sec-Fetch-Dest", "empty")
+                .header("Referer", "https://sippag-web.ifrs.edu.br/portarias/")
+                .header("Accept-Encoding", "gzip, deflate, br")
+                .header("Accept-Language", "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7").ignoreContentType(true).execute();
+        try {
+            JSONObject jsonObject = new JSONObject(resp.body());
+            printJsonObject(jsonObject);
+        } catch (JSONException err) {
+            System.out.println("Error" + err.toString());
         }
     }
 

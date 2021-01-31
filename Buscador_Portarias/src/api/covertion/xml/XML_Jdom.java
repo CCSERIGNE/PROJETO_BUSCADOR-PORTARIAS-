@@ -78,6 +78,7 @@ public class XML_Jdom {
             NameArchiv = NameArchiv.replace("_DOISpont_", ":");
             NameArchiv = NameArchiv.replace("_baraduplas_", "//");
             NameArchiv = NameArchiv.replace("barra", "/");
+            NameArchiv = NameArchiv.replace("interrogacao", "?");
             Element elemDoc = new Element("Document");
             elemDoc.setAttribute("id", "" + numPort + "");
             elemDoc.setAttribute("nome_arquivo", "" + nomeArquivo + "");
