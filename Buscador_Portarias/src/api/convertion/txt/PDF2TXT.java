@@ -26,7 +26,7 @@ import static sun.management.Agent.error;
 
 public class PDF2TXT {
     
-    public static void Open_Dir() throws IOException {
+    public static void Open_Dir(String tipoSite) throws IOException {
         System.setProperty("user.dir",VarivaisGlobais.SRCARCH);
         File dir = new File(System.getProperty("user.dir"));
 
@@ -37,11 +37,12 @@ public class PDF2TXT {
             String DEST_F = VarivaisGlobais.DEST + "" + nomeTXT.toString().trim() + ".txt";
             File file = new File(DEST_F);
             file.getParentFile().mkdirs();
-            LerArquivo(SRC_F , DEST_F);
+           
+            LerArquivo(SRC_F , DEST_F, tipoSite);
         }
     }
     
-    public static void LerArquivo(String src , String dest){
+    public static void LerArquivo(String src , String dest , String tipoSite){
          try {  
             String pdfFile = src;             
              System.out.println("des : "+dest);
@@ -53,9 +54,16 @@ public class PDF2TXT {
                 PDFParser parser = new PDFParser(fileInputStream);  
                 parser.parse();  
                 pdfDocument = parser.getPDDocument();  
-                PDFTextStripper stripper = new PDFTextStripper();  
-  
-                buffWrite.append(stripper.getText(pdfDocument));
+                PDFTextStripper stripper = new PDFTextStripper();
+                switch(tipoSite){
+                    case "novo":
+                        buffWrite.append(stripper.getText(pdfDocument).concat("End_New_Official"));
+                    break;
+                    default:
+                        buffWrite.append(stripper.getText(pdfDocument));
+                    break;
+                }
+                
                 buffWrite.close();
             } finally {  
                 if (pdfDocument != null) {  
@@ -70,7 +78,8 @@ public class PDF2TXT {
     } 
     
     public static void main(String[] args) throws IOException {
-        Open_Dir();
+        VarivaisGlobais.setTiposite("novo");
+        Open_Dir(VarivaisGlobais.getTiposite());
     }  
 }
     

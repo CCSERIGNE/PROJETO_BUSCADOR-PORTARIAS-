@@ -35,6 +35,10 @@ public class Buscador_Portarias {
 
             if (null != args[i].trim()) {
                 switch (args[i].trim()) {
+                    case "typSit":
+                        System.out.println(args[i + 1].trim());
+                         VarivaisGlobais.setTiposite(args[i + 1].trim());
+                        break;
                     case "dest":
                         VarivaisGlobais.SetDestinario(args[i + 1].trim());
                         break;
@@ -62,7 +66,7 @@ public class Buscador_Portarias {
                         }
                         break;
                     case "covertTXT":
-                        PDF2TXT.Open_Dir();
+                        PDF2TXT.Open_Dir(VarivaisGlobais.getTiposite());
                         break;
                     case "convertXML":
                         XML_Jdom.Open_DirArchive();

@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static java.util.stream.DoubleStream.builder;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -23,7 +22,7 @@ public class ConvertXML_doc {
     
     public static Element getdocXML(String src){
         SAXBuilder builder = new SAXBuilder();
-        Document doc = null;
+        Document doc;
          Element agenda = null ;
         try {
             doc = builder.build(new File(src));

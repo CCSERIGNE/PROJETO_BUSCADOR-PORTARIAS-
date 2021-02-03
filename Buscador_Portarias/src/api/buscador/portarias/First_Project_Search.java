@@ -1,6 +1,5 @@
 package api.buscador.portarias;
 
-import api.variaveis.globais.VarivaisGlobais;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,8 +45,7 @@ public class First_Project_Search {
             System.exit(0);
         }
         
-        String queryStringget = "";
-        queryStringget = "edimar";
+        String queryStringget = "edimar";
 
         for (int i = 0; i < args.length; i++) {
             if ("-query".equals(args[i])) {
@@ -68,7 +66,7 @@ public class First_Project_Search {
         String queryString = queryStringPes;
         int hitsPerPage = 10;
 
-        index = "C:\\Users\\Igor\\Documents\\PDFextraid\\Indexado";//Caminho dos itens indexados
+        index = "C:\\Users\\Igor\\Documents\\PDFs\\index";//Caminho dos itens indexados
         // index = "/var/www/indexado";//Caminho dos itens indexados
 
 
@@ -108,7 +106,7 @@ public class First_Project_Search {
                     searcher.search(query, 100);
                 }
                 Date end = new Date();
-                System.out.println("Time: " + (end.getTime() - start.getTime()) + "ms");;
+                System.out.println("Time: " + (end.getTime() - start.getTime()) + "ms");
             }
 
             doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);

@@ -60,7 +60,7 @@ public class DownloadOficialNovo {
     }
 
     public static void printJsonObject(JSONObject jsonObj) {
-        VarivaisGlobais.SetDestinario("C:\\Users\\Igor\\Documents\\PDFs\\Novo\\");
+//        VarivaisGlobais.SetDestinario("C:\\Users\\Igor\\Documents\\PDFs\\Novo\\");
         for (Object key : jsonObj.keySet()) {
             //based on you key types
             String keyStr = (String) key;

@@ -2,12 +2,7 @@ package api.buscador.portarias;
 
 import static api.buscador.portarias.ConvertXML_doc.getdocXML;
 import api.variaveis.globais.VarivaisGlobais;
-import static api.variaveis.globais.VarivaisGlobais.DEST;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,11 +16,9 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import java.io.File;
-import java.nio.charset.Charset;
 import java.util.List;
 import org.apache.lucene.document.Document;
 import org.jdom2.Element;
@@ -138,9 +131,7 @@ public class First_Project_Indexing {
         doc.add(pathField_2);
         doc.add(pathField_3);
         doc.add(new LongPoint("modified", lastModified));
-//        InputStream inputStream = new ByteArrayInputStream(Conteudo.getBytes(Charset.forName("UTF-8")));
-//        Field Field_4 = new TextField("contents", new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
-            
+
         byte[] conteudoBytes = Conteudo.getBytes(StandardCharsets.UTF_8);
         Conteudo = new String(conteudoBytes, StandardCharsets.UTF_8);
         

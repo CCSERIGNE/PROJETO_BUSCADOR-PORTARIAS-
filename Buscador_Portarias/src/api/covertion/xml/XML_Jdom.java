@@ -12,7 +12,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -24,10 +23,8 @@ import org.jdom2.output.XMLOutputter;
 
 /**
  *
- * @author Serigne Khassim Mbaye 
- * Estudante Ciênça da computação Email :
- * serignekhassim@gmail.com 
- * 19-09-2020 - IBIRUBA - RS IFRS
+ * @author Serigne Khassim Mbaye Estudante Ciênça da computação Email :
+ * serignekhassim@gmail.com 19-09-2020 - IBIRUBA - RS IFRS
  */
 public class XML_Jdom {
     //Antigo  Atual Official  UFRGS 
@@ -71,8 +68,7 @@ public class XML_Jdom {
             FileWriter savefile = new FileWriter(new File(dest));
             String str;
             boolean escreve = false;
-//            Random random = new Random();
-//            numPort = random.nextInt(10);
+
             String NameArchiv = nomeArquivo;
             NameArchiv = NameArchiv.replace("_DOISpont__baraduplas_", "://");
             NameArchiv = NameArchiv.replace("_DOISpont_", ":");
@@ -110,7 +106,7 @@ public class XML_Jdom {
                                 DatPort = dat[1].toString().trim();
                             } else if (str.contains("de")) {
                                 dat = str.split("de");
-                                int h = 1;
+                                int h;
                                 if (str.contains("DIA")) {
                                     dat = str.split("DIA");
                                 }
@@ -119,7 +115,7 @@ public class XML_Jdom {
                                 }
                             } else if (str.contains("DE")) {
                                 dat = str.split("DE");
-                                int m = 1;
+                                int m;
                                 if (str.contains("DIA")) {
                                     dat = str.split("DIA");
                                 }
@@ -139,9 +135,11 @@ public class XML_Jdom {
                 if (escreve == true) {
                     Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
                             + "|Pró-Reitora|Pró-Reitor|Diretor Geral|Diretor-Geral|Vice-Pró-Reitora|Vice-Pró-Reitor|Vice-Superintendente|VICE-REITOR"
-                            + "|Vice-Superintendente|Reitor|VICE-REITORA|Diretor|Diretora da Faculdade");
+                            + "|Vice-Superintendente|Reitor|VICE-REITORA|Diretor|Diretora da Faculdade|(^)End_New_Official");
                     Matcher rege_2 = p_2.matcher(str);
+                    
                     if (rege_2.lookingAt()) {
+                        System.out.println("Entra apenas  " + nomeArquivo);
                         portaria.setAttribute("ID", IdPortaria);
                         portaria.setAttribute("data", "" + DatPort + "");
                         escreve = false;

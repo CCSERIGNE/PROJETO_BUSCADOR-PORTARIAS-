@@ -18,6 +18,7 @@ public class VarivaisGlobais {
     public static  String SRCARCH ;
     public static  boolean ADD_Index;
     public static  boolean UPDATE;
+    public static  String Tiposite;
     
     public static String getDestinario(){
         return DEST;
@@ -33,6 +34,14 @@ public class VarivaisGlobais {
     
     public static void SetLocalizao(String localizacao){
         SRCARCH = localizacao;
+    }
+
+    public static String getTiposite() {
+        return Tiposite;
+    }
+
+    public static void setTiposite(String Tiposite) {
+        VarivaisGlobais.Tiposite = Tiposite;
     }
 
     
