@@ -89,13 +89,19 @@ public class XML_Jdom {
                 Element text = new Element("text");
                 if (escreve == false) {
                     Pattern p = Pattern.compile("(^)PORTARIA");
+                    Pattern p2 = Pattern.compile("(^)Port. nº [0-9]+/[0-9]{4}");
+                    Pattern p3 = Pattern.compile("(^)Portaria [0-9]+/[0-9]{4}");
                     Matcher rege = p.matcher(str);
+                    Matcher rege2 = p2.matcher(str);
+                    Matcher rege3 = p3.matcher(str);
+                    
+                    
+                    
                     if (rege.lookingAt()) {
                         escreve = true;
                         if (str.contains(" ")) {
                             String[] IDPo = str.split(" ");
 //                            System.out.println(" intact : " + str);
-                            IdPortaria = "";
                             String[] dat;
                             if (str.contains(",")) {
                                 dat = str.split(",");
@@ -128,10 +134,20 @@ public class XML_Jdom {
                                 String[] proxSplit = dat[1].toString().split("de");
                                 IdPortaria = proxSplit[0].toString().trim();
                             }
-
+                            
                         }
                     }
+                    else if(rege2.find()){
+                        String[] separaNumero = rege2.group().split("Port. nº ");
+                        IdPortaria = separaNumero[1];
+                    }
+                    else if(rege3.find()){
+                        String[] separaNumero = rege3.group().split("Portaria ");
+                        IdPortaria = separaNumero[1];
+                    }
                 }
+
+                
                 if (escreve == true) {
                     Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
                             + "|Pró-Reitora|Pró-Reitor|Diretor Geral|Diretor-Geral|Vice-Pró-Reitora|Vice-Pró-Reitor|Vice-Superintendente|VICE-REITOR"
@@ -139,7 +155,20 @@ public class XML_Jdom {
                     Matcher rege_2 = p_2.matcher(str);
                     
                     if (rege_2.lookingAt()) {
-                        System.out.println("Entra apenas  " + nomeArquivo);
+                        VarivaisGlobais.QtdPortarias++;
+//                        if(DatPort.equals("")){
+//                            System.out.println("Sem_data");
+//                            System.out.println(nomeArquivo);
+//                            System.out.println(NameArchiv);
+//                            VarivaisGlobais.QtdSemData++;
+//                        }
+                        if(IdPortaria.equals("")){
+//                            System.out.println("Sem_id");
+//                            System.out.println(nomeArquivo);
+                            System.out.println(NameArchiv);
+                            VarivaisGlobais.QtdSemNumero++;
+                        }
+
                         portaria.setAttribute("ID", IdPortaria);
                         portaria.setAttribute("data", "" + DatPort + "");
                         escreve = false;
@@ -157,6 +186,11 @@ public class XML_Jdom {
                     linhas.add(str);
                 }
             }
+            System.out.println("Quantidade portarias "+VarivaisGlobais.QtdPortarias);
+            System.out.println("Sem Data "+VarivaisGlobais.QtdSemData);
+            System.out.println("Sem numero "+VarivaisGlobais.QtdSemNumero);
+
+
             XMLOutputter saveXML = new XMLOutputter();
             try {
                 saveXML.output(Doc, savefile);
