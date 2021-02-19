@@ -62,8 +62,32 @@ public class XML_Jdom {
         }
     }
 
+    public void setparametros(String str) {
+        Pattern p2 = Pattern.compile("(^)Port. nº [0-9]+/[0-9]{4}");
+        Pattern p3 = Pattern.compile("(^)Portaria [0-9]+/[0-9]{4}");
+        Pattern p4 = Pattern.compile("(^)Nº [0-9]+/[0-9]{4}");
+        Matcher rege2 = p2.matcher(str);
+        Matcher rege3 = p3.matcher(str);
+        Matcher rege4 = p4.matcher(str);
+        if (rege4.find()) {
+//            System.out.println(str);
+            String[] separaNumero = rege4.group().split("Nº ");
+            IdPortaria = separaNumero[1];
+        }
+        if (rege2.find()) {
+            String[] separaNumero = rege2.group().split("Port. nº ");
+            IdPortaria = separaNumero[1];
+        }
+        if (rege3.find()) {
+            String[] separaNumero = rege3.group().split("Portaria ");
+            IdPortaria = separaNumero[1];
+        }
+    }
+
     public void begin(String src, String dest) {
         try {
+            boolean finalizar = false;
+            boolean adicionar = false;
             in = new BufferedReader(new FileReader(src));
             FileWriter savefile = new FileWriter(new File(dest));
             String str;
@@ -87,18 +111,32 @@ public class XML_Jdom {
             while ((str = in.readLine()) != null) {
                 Element portaria = new Element("portaria");
                 Element text = new Element("text");
+                if (finalizar == true && (str = in.readLine()) != null) {
+
+                    setparametros(str);
+                    if (IdPortaria.length() >= 0) {
+                        System.out.println(IdPortaria);
+                        portaria.setAttribute("ID", IdPortaria);
+                        portaria.setAttribute("data", "" + DatPort + "");
+                        escreve = false;
+                        adicionar = false;
+                        finalizar = false;
+                        linhas.add(str);
+                        String dados = linhas.toString().replace("[", "");
+                        String dados_1 = dados.replace("]", "");
+                        text.setText(dados_1);
+                        linhas.removeAll(linhas);
+                        portaria.addContent(text);
+                        elemDoc.addContent(portaria);
+                    }
+                }
                 if (escreve == false) {
                     Pattern p = Pattern.compile("(^)PORTARIA");
-                    Pattern p2 = Pattern.compile("(^)Port. nº [0-9]+/[0-9]{4}");
-                    Pattern p3 = Pattern.compile("(^)Portaria [0-9]+/[0-9]{4}");
                     Matcher rege = p.matcher(str);
-                    Matcher rege2 = p2.matcher(str);
-                    Matcher rege3 = p3.matcher(str);
-                    
-                    
-                    
+
                     if (rege.lookingAt()) {
                         escreve = true;
+                        adicionar = true;
                         if (str.contains(" ")) {
                             String[] IDPo = str.split(" ");
 //                            System.out.println(" intact : " + str);
@@ -134,71 +172,64 @@ public class XML_Jdom {
                                 String[] proxSplit = dat[1].toString().split("de");
                                 IdPortaria = proxSplit[0].toString().trim();
                             }
-                            
                         }
-                    }
-                    else if(rege2.find()){
-                        String[] separaNumero = rege2.group().split("Port. nº ");
-                        IdPortaria = separaNumero[1];
-                    }
-                    else if(rege3.find()){
-                        String[] separaNumero = rege3.group().split("Portaria ");
-                        IdPortaria = separaNumero[1];
                     }
                 }
 
-                
                 if (escreve == true) {
+
+                    setparametros(str);
+
                     Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
                             + "|Pró-Reitora|Pró-Reitor|Diretor Geral|Diretor-Geral|Vice-Pró-Reitora|Vice-Pró-Reitor|Vice-Superintendente|VICE-REITOR"
                             + "|Vice-Superintendente|Reitor|VICE-REITORA|Diretor|Diretora da Faculdade|(^)End_New_Official");
                     Matcher rege_2 = p_2.matcher(str);
-                    
+
                     if (rege_2.lookingAt()) {
                         VarivaisGlobais.QtdPortarias++;
-//                        if(DatPort.equals("")){
-//                            System.out.println("Sem_data");
+                        if (IdPortaria.equals("")) {
 //                            System.out.println(nomeArquivo);
-//                            System.out.println(NameArchiv);
-//                            VarivaisGlobais.QtdSemData++;
-//                        }
-                        if(IdPortaria.equals("")){
-//                            System.out.println("Sem_id");
-//                            System.out.println(nomeArquivo);
-                            System.out.println(NameArchiv);
                             VarivaisGlobais.QtdSemNumero++;
                         }
+                        if (IdPortaria.length() >= 0) {
+                            portaria.setAttribute("ID", IdPortaria);
+                            portaria.setAttribute("data", "" + DatPort + "");
+                            escreve = false;
+                            adicionar = false;
+                            finalizar = true;
+                            linhas.add(str);
+                            String dados = linhas.toString().replace("[", "");
+                            String dados_1 = dados.replace("]", "");
+                            text.setText(dados_1);
+                            linhas.removeAll(linhas);
+                            portaria.addContent(text);
+                            elemDoc.addContent(portaria);
 
-                        portaria.setAttribute("ID", IdPortaria);
-                        portaria.setAttribute("data", "" + DatPort + "");
-                        escreve = false;
-                        linhas.add(str);
-                        String dados = linhas.toString().replace("[", "");
-                        String dados_1 = dados.replace("]", "");
-                        text.setText(dados_1);
-                        linhas.removeAll(linhas);
-                        portaria.addContent(text);
-                        elemDoc.addContent(portaria);
+                        }
+
                     }
                 }
 
-                if (escreve) {
+                if (escreve == true) {
                     linhas.add(str);
                 }
             }
-            System.out.println("Quantidade portarias "+VarivaisGlobais.QtdPortarias);
-            System.out.println("Sem Data "+VarivaisGlobais.QtdSemData);
-            System.out.println("Sem numero "+VarivaisGlobais.QtdSemNumero);
-
+            System.out.println("Quantidade portarias " + VarivaisGlobais.QtdPortarias);
+            System.out.println("Sem Data " + VarivaisGlobais.QtdSemData);
+            System.out.println("Sem numero " + VarivaisGlobais.QtdSemNumero);
 
             XMLOutputter saveXML = new XMLOutputter();
             try {
                 saveXML.output(Doc, savefile);
+
             } catch (IOException e) {
-                Logger.getLogger(XML_Jdom.class.getName()).log(Level.SEVERE, null, e);
+                Logger.getLogger(XML_Jdom.class
+                        .getName()).log(Level.SEVERE, null, e);
+
             }
         } catch (IOException e) {
-            Logger.getLogger(XML_Jdom.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(XML_Jdom.class
+                    .getName()).log(Level.SEVERE, null, e);
         }
     }
 
