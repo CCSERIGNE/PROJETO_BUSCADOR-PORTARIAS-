@@ -13,7 +13,7 @@ import api.collection.portarias.DownloadOficial;
 import api.collection.portarias.DownloadOficialNovo;
 import api.collection.portarias.DownloadUFRGS;
 import api.convertion.txt.PDF2TXT;
-import api.covertion.xml.XML_Jdom;
+import api.covertion.xml.Nova_Convert_XML;
 import api.variaveis.globais.VarivaisGlobais;
 import java.io.IOException;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -69,7 +69,7 @@ public class Buscador_Portarias {
                         PDF2TXT.Open_Dir(VarivaisGlobais.getTiposite());
                         break;
                     case "convertXML":
-                        XML_Jdom.Open_DirArchive();
+                        Nova_Convert_XML.ConvertTXT_XML();
                         break;
                     case "-index":
                         First_Project_Indexing.InicializacaoIndex();

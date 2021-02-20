@@ -7,7 +7,6 @@ package buscador_portarias;
 
 import api.collection.portarias.Downloader;
 import api.variaveis.globais.VarivaisGlobais;
-import com.sun.glass.events.ViewEvent;
 import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +14,6 @@ import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 /**
  *
