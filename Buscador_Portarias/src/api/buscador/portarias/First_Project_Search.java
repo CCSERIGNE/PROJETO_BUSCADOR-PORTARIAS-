@@ -66,6 +66,7 @@ public class First_Project_Search {
         String queryString = queryStringPes;
         int hitsPerPage = 10;
 
+        //index = "C:\\Users\\Igor\\Documents\\Portarias\\Antigo\\INDEX";//Caminho dos itens indexados
         index = "C:\\Users\\Igor\\Documents\\Portarias\\aaIndex";//Caminho dos itens indexados
         // index = "/var/www/indexado";//Caminho dos itens indexados
 

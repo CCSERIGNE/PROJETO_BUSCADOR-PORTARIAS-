@@ -83,6 +83,8 @@ public class First_Project_Indexing {
         Directory dir = FSDirectory.open(Paths.get(indexPath));
         Analyzer analyzer = new StandardAnalyzer();
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+        iwc.setRAMBufferSizeMB(1024);// Tamanho maximo dos arquivos indexados
+
 
         if (create) {
             iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
@@ -99,15 +101,16 @@ public class First_Project_Indexing {
             List<Element> lista = Documents.getChildren();
             List<Element> portarias = Documents.getChildren("portaria");
             for (Element e : portarias) {
-                String[] ids = {""};
-                if (e.getAttributeValue("ID").contains(",")) {
-                    ids = e.getAttributeValue("ID").split(",");
-                } else if (e.getAttributeValue("ID").contains("DO")) {
-                    ids = e.getAttributeValue("ID").split("DO");
-                } else if (e.getAttributeValue("ID").contains("DE")) {
-                    ids = e.getAttributeValue("ID").split("DE");
-                }
-                String ID = ids[0];
+//                String[] ids = {""};
+//                if (e.getAttributeValue("ID").contains(",")) {
+//                    ids = e.getAttributeValue("ID").split(",");
+//                } else if (e.getAttributeValue("ID").contains("DO")) {
+//                    ids = e.getAttributeValue("ID").split("DO");
+//                } else if (e.getAttributeValue("ID").contains("DE")) {
+//                    ids = e.getAttributeValue("ID").split("DE");
+//                }
+                String ID = e.getAttributeValue("ID");
+                System.out.println(e.getAttributeValue("ID"));
                 
                 IndexarXML(writer, Documents.getAttributeValue("site"), e.getChildText("text"), Files.getLastModifiedTime(docDir).toMillis(),
                         ID, e.getAttributeValue("data"));
