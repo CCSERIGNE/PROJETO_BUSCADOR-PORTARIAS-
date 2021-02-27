@@ -27,10 +27,10 @@ public class TesteXML {
     //Antigo  Atual Official  UFRGS 
 
     public static final String Pasta = "Antigo";
-    public static final String DEST = "C:\\Users\\sergi\\Documents\\PDFextraid\\Julho_2020_pdfs\\XML\\" + Pasta + "\\";
-    public static final String SRC = "C:\\Users\\sergi\\Documents\\PDFextraid\\Julho_2020_pdfs\\TXT\\" + Pasta + "\\";
-    public static final String SRCARCH = "C:\\Users\\sergi\\Documents\\PDFextraid\\Julho_2020_pdfs\\TXT\\" + Pasta + "\\";
-    public static final String LOG = "C:\\Users\\sergi\\Documents\\PDFextraid\\Julho_2020_pdfs\\LOG\\" + Pasta + "\\";
+    public static final String DEST = "C:\\Users\\Igor\\Documents\\testes\\XML\\";
+    public static final String SRC = "C:\\Users\\Igor\\Documents\\Portarias\\Antigo\\TXT\\";
+    public static final String SRCARCH = "C:\\Users\\Igor\\Documents\\Portarias\\Antigo\\TXT\\";
+    public static final String LOG = "C:\\Users\\Igor\\Documents\\testes\\LOG\\" ;
     String date;
     static String nomeArquivo;
     String siteArquivo;

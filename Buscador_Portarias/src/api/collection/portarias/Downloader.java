@@ -28,13 +28,21 @@ public class Downloader {
     public Boolean downloadUrl(String imageUrl, String filename) {
 
         try {
-            
+//            System.out.println("urlll : "+imageUrl);
+//            System.out.println("filename : "+filename);
             url = new URL(imageUrl);
             inputStream = url.openStream();
             outputStream = new FileOutputStream(filename);
-
+            
+            
+            
             while ((length = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, length);
+                if(length > 9){
+                    outputStream.write(buffer, 0, length);
+                }
+                else {
+                    System.out.println("Não baixou: "+ imageUrl);
+                }
             }
 
             inputStream.close();

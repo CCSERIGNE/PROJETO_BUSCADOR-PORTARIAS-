@@ -12,10 +12,13 @@ import api.collection.portarias.DownloadAtual;
 import api.collection.portarias.DownloadOficial;
 import api.collection.portarias.DownloadOficialNovo;
 import api.collection.portarias.DownloadUFRGS;
+import api.collection.portarias.UFRGSNovo;
 import api.convertion.txt.PDF2TXT;
 import api.covertion.xml.Nova_Convert_XML;
 import api.variaveis.globais.VarivaisGlobais;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 /**
@@ -37,7 +40,7 @@ public class Buscador_Portarias {
                 switch (args[i].trim()) {
                     case "typSit":
                         System.out.println(args[i + 1].trim());
-                         VarivaisGlobais.setTiposite(args[i + 1].trim());
+                        VarivaisGlobais.setTiposite(args[i + 1].trim());
                         break;
                     case "dest":
                         VarivaisGlobais.SetDestinario(args[i + 1].trim());
@@ -59,7 +62,20 @@ public class Buscador_Portarias {
                             case "UFRGS":
                                 DownloadUFRGS.BaixarPortariasUFRGS();
                                 break;
-                                
+                             
+                            /*
+                            case "NovoUFRGS":
+                                UFRGSNovo.from_id = 18000;
+                                UFRGSNovo.to_id = 106000;
+                                 {
+                                    try {
+                                        UFRGSNovo.download_all();
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Buscador_Portarias.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                                break;
+                            */
                             case "Novo":
                                 DownloadOficialNovo.BaixoPortariasNovo();
                                 break;

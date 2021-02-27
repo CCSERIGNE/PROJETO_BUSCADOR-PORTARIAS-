@@ -25,6 +25,7 @@ import org.jdom2.output.XMLOutputter;
  * @author sergi
  */
 public class Nova_Convert_XML {
+
     String date;
     static String nomeArquivo;
     String siteArquivo;
@@ -41,20 +42,24 @@ public class Nova_Convert_XML {
 
         String childs[] = dir.list();
         int n = 0;
-        
+
         for (String SplitnomeArchiv : childs) {
 
             String nomeTXT[] = SplitnomeArchiv.split(".txt");
             String SRC_F = VarivaisGlobais.SRCARCH + "" + SplitnomeArchiv.toString().trim();
             String DEST_F = VarivaisGlobais.DEST + "" + nomeTXT[0].toString().trim() + ".xml";
-           
+
             nomeArquivo = nomeTXT[0];
             numPort = n++;
             File file = new File(DEST_F);
             file.getParentFile().mkdirs();
-            
+
             new Nova_Convert_XML().begin(SRC_F, DEST_F);
         }
+
+        System.out.println("Quantidade portarias " + VarivaisGlobais.QtdPortarias);
+        System.out.println("Sem Data " + VarivaisGlobais.QtdSemData);
+        System.out.println("Sem numero " + VarivaisGlobais.QtdSemNumero);
     }
 
     public String IdentPortaria(String text) {
@@ -146,13 +151,19 @@ public class Nova_Convert_XML {
         String str;
         boolean escreve = false;
         boolean finalizar = false;
-        
+
         String NameArchiv = nomeArquivo;
-        NameArchiv = NameArchiv.replace("_DOISpont__baraduplas_", "://");
-        NameArchiv = NameArchiv.replace("_DOISpont_", ":");
-        NameArchiv = NameArchiv.replace("_baraduplas_", "//");
-        NameArchiv = NameArchiv.replace("barra", "/");
-        NameArchiv = NameArchiv.replace("interrogacao", "?");
+        if (NameArchiv.startsWith("http")) {
+            NameArchiv = NameArchiv = NameArchiv.replace("_DOISpont__baraduplas_", "://");
+            NameArchiv = NameArchiv.replace("_DOISpont_", ":");
+            NameArchiv = NameArchiv.replace("_baraduplas_", "//");
+            NameArchiv = NameArchiv.replace("barra", "/");
+            NameArchiv = NameArchiv.replace("interrogacao", "?");
+        }
+        else {
+            NameArchiv = "https://www1.ufrgs.br/sistemas/sde/gerencia-documentos/index.php/publico/ExibirPDF?documento="+NameArchiv;
+        }
+
         Element elemDoc = new Element("Document");
         elemDoc.setAttribute("id", "" + numPort + "");
         elemDoc.setAttribute("nome_arquivo", "" + nomeArquivo + "");
@@ -195,12 +206,13 @@ public class Nova_Convert_XML {
                         linhas.removeAll(linhas);
                         portaria.addContent(text);
                         elemDoc.addContent(portaria);
-                        if (DatPort.equals("")) {
-                            VarivaisGlobais.QtdSemData++;
-                        }
-                        if (IdPortaria.equals("")) {
-                            VarivaisGlobais.QtdSemNumero++;
-                        }
+//                        if (DatPort.equals("")) {
+//                            VarivaisGlobais.QtdSemData++;
+//                        }
+//                        if (IdPortaria.equals("")) {
+//                            System.out.println("aaaaaaa");
+//                            VarivaisGlobais.QtdSemNumero++;
+//                        }
                         DatPort = "";
                         IdPortaria = "";
                     } else {
@@ -252,6 +264,7 @@ public class Nova_Convert_XML {
                         VarivaisGlobais.QtdSemData++;
                     }
                     if (IdPortaria.equals("")) {
+                        System.out.println(nomeArquivo);
                         VarivaisGlobais.QtdSemNumero++;
                     }
                     DatPort = "";
@@ -269,8 +282,9 @@ public class Nova_Convert_XML {
         escreve = false;
         XMLOutputter saveXML = new XMLOutputter();
         saveXML.output(Doc, savefile);
+
     }
-    
+
     public static void main(String[] args) throws IOException {
         Nova_Convert_XML.ConvertTXT_XML();
     }
