@@ -64,15 +64,32 @@ public class Nova_Convert_XML {
 
     public String IdentPortaria(String text) {
         String[] dat;
+        Pattern n = Pattern.compile("[0-9]{1,10}");
 
-        Pattern p1 = Pattern.compile("(^)Nº [0-9]+/[0-9]{4}");
-        Pattern p2 = Pattern.compile("(^)Port. nº [0-9]+/[0-9]{4}");
-        Pattern p3 = Pattern.compile("(^)Portaria [0-9]+/[0-9]{4}");
-        Pattern p4 = Pattern.compile("(^)PORTARIA N ");
-        Matcher rege1 = p1.matcher(text);
-        Matcher rege2 = p2.matcher(text);
-        Matcher rege3 = p3.matcher(text);
+        
+//        Pattern p1 = Pattern.compile("Nº [0-9]{1,}+/[0-9]{4}");
+//        Pattern p2 = Pattern.compile("(^)Port. nº [0-9]{1,4}");
+//        Pattern p3 = Pattern.compile("(^)Portaria [0-9]{1,}+/[0-9]{4}");
+        Pattern p4 = Pattern.compile("(^)PORTARIA N [0-9]{1,}");
+        Pattern p5 = Pattern.compile("Nº [0-9]+/[a-zA-Z]{3}+/[a-zA-Z]{4}");
+        Pattern p6 = Pattern.compile("[N-n][º| °| º|°] [0-9]{1,}-");
+        Pattern p7 = Pattern.compile("PORTARIA N[°|º |º |° ][0-9]{1,} [DO DIA|DE]");
+        Pattern p8 = Pattern.compile("PORTARIA N [°|º|° |º ][0-9]{1,} [DO DIA|DE]");
+        Pattern p9 = Pattern.compile("PORTARIA N[°|º] [0-9]{1,}, [DO DIA|DE]");
+        Pattern p10 = Pattern.compile("PORTARIA N[°|º] [0-9]{1,} [DO DIA|DE]");
+
+//        Matcher rege1 = p1.matcher(text);
+//        Matcher rege2 = p2.matcher(text);
+//        Matcher rege3 = p3.matcher(text);
         Matcher rege4 = p4.matcher(text);
+        Matcher rege5 = p5.matcher(text);
+        Matcher rege6 = p6.matcher(text);
+        Matcher rege7 = p7.matcher(text);
+        Matcher rege8 = p8.matcher(text);
+        Matcher rege9 = p9.matcher(text);
+        Matcher rege10 = p10.matcher(text);
+        
+
 
         if (text.contains("Nº")) {
             dat = text.split("Nº");
@@ -87,23 +104,66 @@ public class Nova_Convert_XML {
                     }
                 }
             }
-            IdPortaria = proxSplit_2[0].toString().trim();
+            Matcher numeros = n.matcher(proxSplit_2[0].toString().trim());
+            
+            if(numeros.find()){
+                IdPortaria = numeros.group();
+            }
+            else {
+               IdPortaria = proxSplit_2[0].toString().trim(); 
+            }
         }
-        if (rege1.find()) {
-            String[] separaNumero = rege1.group().split("Nº ");
-            IdPortaria = separaNumero[1].toString();
-        }
-        if (rege2.find()) {
-            String[] separaNumero = rege2.group().split("Port. nº ");
-            IdPortaria = separaNumero[1].toString();
-        }
-        if (rege3.find()) {
-            String[] separaNumero = rege3.group().split("Portaria ");
-            IdPortaria = separaNumero[1].toString();
-        }
+
+//        if (rege1.find()) {
+//            String[] separaNumero = rege1.group().split("Nº ");
+//            IdPortaria = separaNumero[1].toString();
+//        }
+//        if (rege2.find()) {
+//            String[] separaNumero = rege2.group().split("Port. nº ");
+//            IdPortaria = separaNumero[1].toString();
+//        }
+//        if (rege3.find()) {
+//            String[] separaNumero = rege3.group().split("Portaria ");
+//            separaNumero = separaNumero[1].toString().split("/");
+//            IdPortaria = separaNumero[0];
+//
+//        }
         if (rege4.find()) {
             String[] separaNumero = text.toString().toLowerCase().replaceAll("[a-z]", "").split("   ");
             IdPortaria = separaNumero[0].toString();
+        }
+        if (rege5.find()) {
+            String[] separaNumero = rege5.group().replace("Nº ", "").split("/");
+            IdPortaria = separaNumero[0].toString();
+        }
+        
+        
+        if (rege6.find()) {
+            String[] separaNumero = rege6.group().toString().replace("-", "").split("º|°");
+            IdPortaria = separaNumero[1].toString().trim();
+        }
+        
+
+        
+        if (rege7.find()) {
+            String[] separaNumero = rege7.group().split("°|º");
+            separaNumero = separaNumero[1].split(" ");
+            IdPortaria = separaNumero[0].toString().trim();
+        }
+        if (rege8.find()) {
+            String[] separaNumero = rege8.group().split("°|º");
+            separaNumero = separaNumero[1].split(" ");
+            IdPortaria = separaNumero[0].toString().trim();
+        }
+        if (rege9.find()) {
+            String[] separaNumero = rege9.group().split("°|º");
+            separaNumero = separaNumero[1].split(",");
+            IdPortaria = separaNumero[0].toString().trim();
+        }
+        if (rege10.find()) {
+            String[] separaNumero = rege10.group().split("°|º");
+            separaNumero = separaNumero[1].split("D");
+            IdPortaria = separaNumero[0].toString().trim();
         }
 
         return IdPortaria;
@@ -154,14 +214,13 @@ public class Nova_Convert_XML {
 
         String NameArchiv = nomeArquivo;
         if (NameArchiv.startsWith("http")) {
-            NameArchiv = NameArchiv = NameArchiv.replace("_DOISpont__baraduplas_", "://");
+            NameArchiv = NameArchiv.replace("_DOISpont__baraduplas_", "://");
             NameArchiv = NameArchiv.replace("_DOISpont_", ":");
             NameArchiv = NameArchiv.replace("_baraduplas_", "//");
             NameArchiv = NameArchiv.replace("barra", "/");
             NameArchiv = NameArchiv.replace("interrogacao", "?");
-        }
-        else {
-            NameArchiv = "https://www1.ufrgs.br/sistemas/sde/gerencia-documentos/index.php/publico/ExibirPDF?documento="+NameArchiv;
+        } else {
+            NameArchiv = "https://www1.ufrgs.br/sistemas/sde/gerencia-documentos/index.php/publico/ExibirPDF?documento=" + NameArchiv;
         }
 
         Element elemDoc = new Element("Document");
@@ -184,12 +243,15 @@ public class Nova_Convert_XML {
                     escreve = true;
                     VarivaisGlobais.QtdPortarias++;
                     GetDAtePortaria(str);
-                    IdentPortaria(str);
-
                 }
             }
 
             if (escreve == true) {
+                
+                if(IdPortaria.length() <= 0){
+                    IdentPortaria(str);
+                }
+                
                 Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
                         + "|Pró-Reitora|Pró-Reitor|Diretor Geral|Diretor-Geral|Vice-Pró-Reitora|Vice-Pró-Reitor|Vice-Superintendente|VICE-REITOR"
                         + "|Vice-Superintendente|Reitor|VICE-REITORA|Diretor|Diretora da Faculdade|(^)End_New_Official");
@@ -206,13 +268,7 @@ public class Nova_Convert_XML {
                         linhas.removeAll(linhas);
                         portaria.addContent(text);
                         elemDoc.addContent(portaria);
-//                        if (DatPort.equals("")) {
-//                            VarivaisGlobais.QtdSemData++;
-//                        }
-//                        if (IdPortaria.equals("")) {
-//                            System.out.println("aaaaaaa");
-//                            VarivaisGlobais.QtdSemNumero++;
-//                        }
+
                         DatPort = "";
                         IdPortaria = "";
                     } else {
@@ -225,7 +281,6 @@ public class Nova_Convert_XML {
             if (finalizar == true && IdPortaria.length() < 1) {
                 Pattern poll = Pattern.compile("(^)Port. nº|Portaria");
                 Matcher rege_poll = poll.matcher(str);
-                IdentPortaria(str);
                 if (rege_poll.lookingAt()) {
                     escreve = false;
                     finalizar = false;
@@ -243,6 +298,7 @@ public class Nova_Convert_XML {
                         VarivaisGlobais.QtdSemData++;
                     }
                     if (IdPortaria.equals("")) {
+                        System.out.println(nomeArquivo);
                         VarivaisGlobais.QtdSemNumero++;
                     }
                     DatPort = "";

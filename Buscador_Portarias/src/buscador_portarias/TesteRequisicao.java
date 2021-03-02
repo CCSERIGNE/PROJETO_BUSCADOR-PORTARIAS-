@@ -30,7 +30,7 @@ public class TesteRequisicao {
         } else {
             getHttps = webFile;
         }
-       
+
         NameArchiv = NameArchiv.replace(":", "_DOISpont_");
         NameArchiv = NameArchiv.replace("//", "_baraduplas_");
         NameArchiv = NameArchiv.replace("/", "barra");
@@ -43,7 +43,6 @@ public class TesteRequisicao {
         getHttps = getHttps.replace("º", "%C2%BA");
         getHttps = getHttps.replace("?ano", "/?ano");
         System.out.println(" receita : " + getHttps);
-        
 
         String localpath = VarivaisGlobais.DEST + "" + NameArchiv + ".pdf";
 
@@ -67,17 +66,17 @@ public class TesteRequisicao {
                     System.out.println(json.get(0));
                     for (Object object : json) {
 //                        if (object instanceof JSONObject) {
-                            String url = ((JSONObject) object).get("url").toString();
-                            System.out.println(((JSONObject) object).get("url"));
-                            JSONObject assinatura = (JSONObject) ((JSONObject) object).get("assinatura");;
+                        String url = ((JSONObject) object).get("url").toString();
+                        System.out.println(((JSONObject) object).get("url"));
+                        JSONObject assinatura = (JSONObject) ((JSONObject) object).get("assinatura");;
 //                            if (assinatura instanceof JSONObject ){
-                            String nome = assinatura.get("interessadoNome").toString();
-                                System.out.println(nome);
-                                TesteRequisicao dow = new TesteRequisicao();
-                                
+                        String nome = assinatura.get("interessadoNome").toString();
+                        System.out.println(nome);
+                        TesteRequisicao dow = new TesteRequisicao();
+
 //                                System.out.println(assinatura.get("url"));
 //                            }
-                            dow.PreparedDownload(url, nome,0);
+                        dow.PreparedDownload(url, nome, 0);
 //                        }
 //                        System.out.println();
                     }

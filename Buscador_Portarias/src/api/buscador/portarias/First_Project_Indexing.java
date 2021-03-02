@@ -48,7 +48,7 @@ public class First_Project_Indexing {
         String indexPath = VarivaisGlobais.DEST;
         String docsPath = VarivaisGlobais.SRCARCH;
         boolean create = false;
-        
+
         // Exclui tudo no diretório destino
         File folder = new File(indexPath);
         if (folder.isDirectory()) {
@@ -56,14 +56,14 @@ public class First_Project_Indexing {
             for (File toDelete : sun) {
                 toDelete.delete();
             }
-        }       
-        
+        }
+
         if (VarivaisGlobais.ADD_Index) {
             create = true;
         } else if (VarivaisGlobais.UPDATE) {
             create = false;
         }
-        
+
         if (docsPath == null) {
             System.err.println("Usage: ");
             System.exit(1);
@@ -85,7 +85,6 @@ public class First_Project_Indexing {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         iwc.setRAMBufferSizeMB(1024);// Tamanho maximo dos arquivos indexados
 
-
         if (create) {
             iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
         } else {
@@ -101,17 +100,9 @@ public class First_Project_Indexing {
             List<Element> lista = Documents.getChildren();
             List<Element> portarias = Documents.getChildren("portaria");
             for (Element e : portarias) {
-//                String[] ids = {""};
-//                if (e.getAttributeValue("ID").contains(",")) {
-//                    ids = e.getAttributeValue("ID").split(",");
-//                } else if (e.getAttributeValue("ID").contains("DO")) {
-//                    ids = e.getAttributeValue("ID").split("DO");
-//                } else if (e.getAttributeValue("ID").contains("DE")) {
-//                    ids = e.getAttributeValue("ID").split("DE");
-//                }
                 String ID = e.getAttributeValue("ID");
                 System.out.println(e.getAttributeValue("ID"));
-                
+
                 IndexarXML(writer, Documents.getAttributeValue("site"), e.getChildText("text"), Files.getLastModifiedTime(docDir).toMillis(),
                         ID, e.getAttributeValue("data"));
             }
@@ -137,7 +128,7 @@ public class First_Project_Indexing {
 
         byte[] conteudoBytes = Conteudo.getBytes(StandardCharsets.UTF_8);
         Conteudo = new String(conteudoBytes, StandardCharsets.UTF_8);
-        
+
         Field Field_4 = new TextField("contents", Conteudo, Field.Store.YES);
         doc.add(Field_4);
 //        String dados = doc.get("contents");
@@ -145,7 +136,7 @@ public class First_Project_Indexing {
 
 //        if (write.getConfig().getOpenMode() == IndexWriterConfig.OpenMode.CREATE) {
 //            //se o index e novo criar documento relaciona
-            write.addDocument(doc);
+        write.addDocument(doc);
 //        } else {
 //            se documento existe atualiza
 //            write.updateDocument(new Term("path", link), doc);
