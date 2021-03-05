@@ -97,11 +97,9 @@ public class First_Project_Indexing {
         for (String child : childs) {
             String SRC_F = VarivaisGlobais.SRCARCH + "" + child.toString().trim();
             Element Documents = getdocXML(SRC_F);
-            List<Element> lista = Documents.getChildren();
             List<Element> portarias = Documents.getChildren("portaria");
             for (Element e : portarias) {
                 String ID = e.getAttributeValue("ID");
-                System.out.println(e.getAttributeValue("ID"));
 
                 IndexarXML(writer, Documents.getAttributeValue("site"), e.getChildText("text"), Files.getLastModifiedTime(docDir).toMillis(),
                         ID, e.getAttributeValue("data"));
@@ -131,15 +129,8 @@ public class First_Project_Indexing {
 
         Field Field_4 = new TextField("contents", Conteudo, Field.Store.YES);
         doc.add(Field_4);
-//        String dados = doc.get("contents");
-//        System.out.println(dados);
 
-//        if (write.getConfig().getOpenMode() == IndexWriterConfig.OpenMode.CREATE) {
-//            //se o index e novo criar documento relaciona
         write.addDocument(doc);
-//        } else {
-//            se documento existe atualiza
-//            write.updateDocument(new Term("path", link), doc);
-//        }
+
     }
 }

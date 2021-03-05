@@ -22,6 +22,7 @@ public class VarivaisGlobais {
     public static  int QtdPortarias = 0;
     public static  int QtdSemData = 0;
     public static  int QtdSemNumero = 0;
+    public static  int NovoIdCorreto = 0;
 
     
     public static String getDestinario(){
