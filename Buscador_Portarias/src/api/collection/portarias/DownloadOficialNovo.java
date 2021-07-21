@@ -7,6 +7,7 @@ package api.collection.portarias;
 
 import api.variaveis.globais.VarivaisGlobais;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,35 +88,49 @@ public class DownloadOficialNovo {
 
     public static void BaixoPortariasNovo() throws IOException {
         Calendar cal = Calendar.getInstance();
-        int anoPortarias = 2017; // Começaram a ser postadas em 2017
+        int anoPortarias = 2020; // Começaram a ser postadas em 2017
         int anoAtual = cal.get(Calendar.YEAR);
 
-        while (anoPortarias <= anoAtual) {
+        ArrayList<String> ifrsLinks = new ArrayList<>();
+        ifrsLinks.add("ifce");;//        ifrsLinks.add("ifrs");
+        ifrsLinks.add("ifnmg");
+        //// ifrsLinks.add("ifsertao-pe"); // NÃO
+        ifrsLinks.add("IFBaiano");
+        ifrsLinks.add("ifal");
+        for (int i = 0; i < ifrsLinks.size(); i++) {
 
-            String LinkAtual = "https://sippag-web.ifrs.edu.br/api/v1/portaria?ano=" + anoPortarias + "&page=0&size=10000";
-            Response resp = Jsoup.connect(LinkAtual).method(Connection.Method.GET)
-                    .header("Host", "sippag-web.ifrs.edu.br")
-                    .header("Connection", "keep-alive")
-                    .header("Pragma", "no-cache")
-                    .header("Cache-Control", "no-cache")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36")
-                    .header("DNT", "1")
-                    .header("authorization", "null null")
-                    .header("content-type", "application/json")
-                    .header("Accept", "*/*")
-                    .header("Sec-Fetch-Site", "same-origin")
-                    .header("Sec-Fetch-Mode", "cors")
-                    .header("Sec-Fetch-Dest", "empty")
-                    .header("Referer", "https://sippag-web.ifrs.edu.br/portarias/")
-                    .header("Accept-Encoding", "gzip, deflate, br")
-                    .header("Accept-Language", "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7").ignoreContentType(true).execute();
-            try {
-                JSONObject jsonObject = new JSONObject(resp.body());
-                printJsonObject(jsonObject);
-            } catch (JSONException err) {
-                System.out.println("Error" + err.toString());
+            while (anoPortarias <= anoAtual) {
+                VarivaisGlobais.SetDestinario("C:\\Users\\Igor\\Documents\\Portarias\\Sippag\\PDF\\" + ifrsLinks.get(i) + "\\" + anoPortarias + "\\");
+
+                String LinkAtual = "https://sippag-web." + ifrsLinks.get(i) + ".edu.br/api/v1/portaria?ano=" + anoPortarias + "&page=0&size=10000";
+                Response resp = Jsoup.connect(LinkAtual).method(Connection.Method.GET)
+                        .header("Host", "sippag-web." + ifrsLinks.get(i) + ".edu.br")
+                        .header("Connection", "keep-alive")
+                        .header("Pragma", "no-cache")
+                        .header("Cache-Control", "no-cache")
+                        .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36")
+                        .header("DNT", "1")
+                        .header("authorization", "null null")
+                        .header("content-type", "application/json")
+                        .header("Accept", "*/*")
+                        .header("Sec-Fetch-Site", "same-origin")
+                        .header("Sec-Fetch-Mode", "cors")
+                        .header("Sec-Fetch-Dest", "empty")
+                        .header("Referer", "https://sippag-web." + ifrsLinks.get(i) + ".edu.br/portarias/")
+                        .header("Accept-Encoding", "gzip, deflate, br")
+                        .header("Accept-Language", "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7").ignoreContentType(true).execute();
+                
+          
+                try {
+                    JSONObject jsonObject = new JSONObject(resp.body());
+                    printJsonObject(jsonObject);
+                } catch (JSONException err) {
+                    System.out.println("Error" + err.toString());
+                }
+                anoPortarias++;
+
             }
-            anoPortarias++;
+
         }
 
     }
