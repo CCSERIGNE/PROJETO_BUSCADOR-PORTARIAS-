@@ -7,6 +7,7 @@ package api.covertion.xml;
 
 import api.variaveis.globais.VarivaisGlobais;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,14 +20,15 @@ import java.util.regex.Pattern;
  */
 public class PegandoValores {
 
-    public static String diretorio = "C:\\Users\\Igor\\Documents\\NetBeansProjects\\PROJETO_BUSCADOR-PORTARIAS-\\Arquivos\\expressoesRegulares.txt";
-
     public static ArrayList<String> LeExpressoesRegularesTxt() throws IOException {
+        String diretorio = System.getProperty("user.dir");
+        diretorio = diretorio.replace("Buscador_Portarias", "\\Arquivos\\expressoesRegulares.txt");
+        System.out.println("Expressões Regulares --> " + diretorio);
 
-        ArrayList<String> expressoes;
+        ArrayList<String> expressoes = new ArrayList<>();
+
         try (BufferedReader buffRead = new BufferedReader(new FileReader(diretorio))) {
             String linha = "";
-            expressoes = new ArrayList<>();
             while (true) {
                 if (linha != null) {
                     linha = buffRead.readLine();
@@ -51,5 +53,48 @@ public class PegandoValores {
             }
         }
         return "";
+    }
+
+    public static String IdentPortaria(String text) throws FileNotFoundException, IOException {
+        String idPortaria;
+        ArrayList<String> expressoes = LeExpressoesRegularesTxt();
+        idPortaria = VerificaExpressoes(expressoes, text);
+        return idPortaria;
+    }
+
+    public static String GetDAtePortaria(String text) {
+        String datPort = "";
+        if (text.contains(" ")) {
+            String[] dat;
+            if (text.contains(",")) {
+                dat = text.split(",");
+                datPort = dat[1].toString().trim();
+            } else if (text.contains("de")) {
+                dat = text.split("de");
+                int h;
+                if (text.contains("DIA")) {
+                    dat = text.split("DIA");
+                }
+                for (h = 1; h < dat.length; h++) {
+                    datPort = dat[h].toString().trim();
+                }
+            } else if (text.contains("DE")) {
+                dat = text.split("DE");
+                int m = 0;
+                if (text.contains("DIA")) {
+                    dat = text.split("DIA");
+                    for (m = 1; m < dat.length; m++) {
+                        datPort = dat[m].toString().trim();
+                    }
+                } else {
+                    String dtpor = dat[m].toString().trim();
+                    for (m = 2; m < dat.length; m++) {
+                        dtpor = dtpor + " " + dat[m].toString().trim();
+                        datPort = dtpor.toString();
+                    }
+                }
+            }
+        }
+        return datPort;
     }
 }

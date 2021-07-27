@@ -5,7 +5,8 @@
  */
 package api.covertion.xml;
 
-import static api.covertion.xml.PegandoValores.LeExpressoesRegularesTxt;
+import static api.covertion.xml.PegandoValores.IdentPortaria;
+import static api.covertion.xml.PegandoValores.GetDAtePortaria;
 import api.variaveis.globais.VarivaisGlobais;
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,10 +39,7 @@ public class Nova_Convert_XML {
     String DatPort = "";
 
     public static void ConvertTXT_XML() throws IOException {
-
-        System.setProperty("user.dir", VarivaisGlobais.SRCARCH);
-        File dir = new File(System.getProperty("user.dir"));
-
+        File dir = new File(VarivaisGlobais.SRCARCH);
         String childs[] = dir.list();
         int n = 0;
 
@@ -64,74 +62,7 @@ public class Nova_Convert_XML {
         System.out.println("Sem numero " + VarivaisGlobais.QtdSemNumero);
     }
 
-    public String IdentPortaria(ArrayList<String> expressoes, String text) throws FileNotFoundException, IOException {
-        String[] dat;
-        Pattern n = Pattern.compile("[0-9]{1,10}");
-
-        if (text.contains("Nº")) {
-            dat = text.split("Nº");
-            String[] proxSplit = dat[1].toString().split("de");
-            String VChek = proxSplit[0].toString().replaceAll("PORTARIA ", "");
-            String[] proxSplit_2 = VChek.split(",");
-            if (proxSplit_2.length < 2) {
-                proxSplit_2 = VChek.split("DO");
-                if (proxSplit_2.length < 2) {
-                    proxSplit_2 = VChek.split("DE");
-                    if (proxSplit_2.length < 2) {
-                    }
-                }
-            }
-
-            Matcher numeros = n.matcher(proxSplit_2[0].toString().trim());
-
-            if (numeros.find()) {
-                IdPortaria = numeros.group();
-            } else {
-                IdPortaria = proxSplit_2[0].toString().trim();
-            }
-        }
-        IdPortaria = PegandoValores.VerificaExpressoes(expressoes, text);
-
-        return IdPortaria;
-    }
-
-    public String GetDAtePortaria(String text) {
-        if (text.contains(" ")) {
-            String[] dat;
-            if (text.contains(",")) {
-                dat = text.split(",");
-                DatPort = dat[1].toString().trim();
-            } else if (text.contains("de")) {
-                dat = text.split("de");
-                int h;
-                if (text.contains("DIA")) {
-                    dat = text.split("DIA");
-                }
-                for (h = 1; h < dat.length; h++) {
-                    DatPort = dat[h].toString().trim();
-                }
-            } else if (text.contains("DE")) {
-                dat = text.split("DE");
-                int m = 0;
-                if (text.contains("DIA")) {
-                    dat = text.split("DIA");
-                    for (m = 1; m < dat.length; m++) {
-                        DatPort = dat[m].toString().trim();
-                    }
-                } else {
-                    String dtpor = dat[m].toString().trim();
-                    for (m = 2; m < dat.length; m++) {
-                        dtpor = dtpor + " " + dat[m].toString().trim();
-                        DatPort = dtpor.toString();
-                    }
-                }
-            }
-        }
-        return DatPort;
-    }
-
     public void begin(String src, String dest) throws FileNotFoundException, IOException {
-        ArrayList<String> expressoes = LeExpressoesRegularesTxt();
 
         in = new BufferedReader(new FileReader(src));
         FileWriter savefile = new FileWriter(new File(dest));
@@ -170,14 +101,14 @@ public class Nova_Convert_XML {
                 if (rege.find()) {
                     escreve = true;
                     VarivaisGlobais.QtdPortarias++;
-                    GetDAtePortaria(str);
+                    DatPort = GetDAtePortaria(str);
                 }
             }
 
             if (escreve == true) {
 
                 if (IdPortaria.length() <= 0) {
-                    IdentPortaria(expressoes, str);
+                    IdPortaria = IdentPortaria(str);
                 }
 
                 Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
