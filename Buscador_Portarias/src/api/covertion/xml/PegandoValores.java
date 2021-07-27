@@ -5,12 +5,13 @@
  */
 package api.covertion.xml;
 
-import api.variaveis.globais.VarivaisGlobais;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,29 +21,39 @@ import java.util.regex.Pattern;
  */
 public class PegandoValores {
 
+    static ArrayList<String> expressoes;
+
+    static {
+        try {
+            expressoes = LeExpressoesRegularesTxt();
+        } catch (IOException ex) {
+            Logger.getLogger(PegandoValores.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static ArrayList<String> LeExpressoesRegularesTxt() throws IOException {
         String diretorio = System.getProperty("user.dir");
         diretorio = diretorio.replace("Buscador_Portarias", "\\Arquivos\\expressoesRegulares.txt");
         System.out.println("Expressões Regulares --> " + diretorio);
 
-        ArrayList<String> expressoes = new ArrayList<>();
+        ArrayList<String> expressoesLista = new ArrayList<>();
 
         try (BufferedReader buffRead = new BufferedReader(new FileReader(diretorio))) {
             String linha = "";
             while (true) {
                 if (linha != null) {
                     linha = buffRead.readLine();
-                    expressoes.add(linha);
+                    expressoesLista.add(linha);
                 } else {
                     break;
                 }
             }
         }
 
-        return expressoes;
+        return expressoesLista;
     }
 
-    public static String VerificaExpressoes(ArrayList<String> expressoes, String text) throws IOException {
+    public static String VerificaExpressoes(String text) throws IOException {
         text = text.toUpperCase();
 
         for (int i = 0; i < expressoes.size() - 1; i++) {
@@ -57,8 +68,7 @@ public class PegandoValores {
 
     public static String IdentPortaria(String text) throws FileNotFoundException, IOException {
         String idPortaria;
-        ArrayList<String> expressoes = LeExpressoesRegularesTxt();
-        idPortaria = VerificaExpressoes(expressoes, text);
+        idPortaria = VerificaExpressoes(text);
         return idPortaria;
     }
 
