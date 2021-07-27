@@ -1,0 +1,4 @@
+(^)PORTARIA N (.*?) 
+PORTARIA Nº\s*(.*?),* [DO DIA|DE]
+Nº (.*?)+/[a-zA-Z]{3}+/[a-zA-Z]{4}
+Nº\s*(.*?)-

@@ -5,6 +5,7 @@
  */
 package api.covertion.xml;
 
+import static api.covertion.xml.PegandoValores.LeExpressoesRegularesTxt;
 import api.variaveis.globais.VarivaisGlobais;
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,34 +64,9 @@ public class Nova_Convert_XML {
         System.out.println("Sem numero " + VarivaisGlobais.QtdSemNumero);
     }
 
-    public String IdentPortaria(String text) {
+    public String IdentPortaria(ArrayList<String> expressoes, String text) throws FileNotFoundException, IOException {
         String[] dat;
         Pattern n = Pattern.compile("[0-9]{1,10}");
-
-        
-//        Pattern p1 = Pattern.compile("Nº [0-9]{1,}+/[0-9]{4}");
-//        Pattern p2 = Pattern.compile("(^)Port. nº [0-9]{1,4}");
-//        Pattern p3 = Pattern.compile("(^)Portaria [0-9]{1,}+/[0-9]{4}");
-        Pattern p4 = Pattern.compile("(^)PORTARIA N [0-9]{1,}");
-        Pattern p5 = Pattern.compile("Nº [0-9]+/[a-zA-Z]{3}+/[a-zA-Z]{4}");
-        Pattern p6 = Pattern.compile("[N-n][º| °| º|°] [0-9]{1,}-");
-        Pattern p7 = Pattern.compile("PORTARIA N[°|º |º |° ][0-9]{1,} [DO DIA|DE]");
-        Pattern p8 = Pattern.compile("PORTARIA N [°|º|° |º ][0-9]{1,} [DO DIA|DE]");
-        Pattern p9 = Pattern.compile("PORTARIA N[°|º] [0-9]{1,}, [DO DIA|DE]");
-        Pattern p10 = Pattern.compile("PORTARIA N[°|º] [0-9]{1,} [DO DIA|DE]");
-
-//        Matcher rege1 = p1.matcher(text);
-//        Matcher rege2 = p2.matcher(text);
-//        Matcher rege3 = p3.matcher(text);
-        Matcher rege4 = p4.matcher(text);
-        Matcher rege5 = p5.matcher(text);
-        Matcher rege6 = p6.matcher(text);
-        Matcher rege7 = p7.matcher(text);
-        Matcher rege8 = p8.matcher(text);
-        Matcher rege9 = p9.matcher(text);
-        Matcher rege10 = p10.matcher(text);
-        
-
 
         if (text.contains("Nº")) {
             dat = text.split("Nº");
@@ -104,67 +81,16 @@ public class Nova_Convert_XML {
                     }
                 }
             }
+
             Matcher numeros = n.matcher(proxSplit_2[0].toString().trim());
-            
-            if(numeros.find()){
+
+            if (numeros.find()) {
                 IdPortaria = numeros.group();
+            } else {
+                IdPortaria = proxSplit_2[0].toString().trim();
             }
-            else {
-               IdPortaria = proxSplit_2[0].toString().trim(); 
-            }
         }
-
-//        if (rege1.find()) {
-//            String[] separaNumero = rege1.group().split("Nº ");
-//            IdPortaria = separaNumero[1].toString();
-//        }
-//        if (rege2.find()) {
-//            String[] separaNumero = rege2.group().split("Port. nº ");
-//            IdPortaria = separaNumero[1].toString();
-//        }
-//        if (rege3.find()) {
-//            String[] separaNumero = rege3.group().split("Portaria ");
-//            separaNumero = separaNumero[1].toString().split("/");
-//            IdPortaria = separaNumero[0];
-//
-//        }
-        if (rege4.find()) {
-            String[] separaNumero = text.toString().toLowerCase().replaceAll("[a-z]", "").split("   ");
-            IdPortaria = separaNumero[0].toString();
-        }
-        if (rege5.find()) {
-            String[] separaNumero = rege5.group().replace("Nº ", "").split("/");
-            IdPortaria = separaNumero[0].toString();
-        }
-        
-        
-        if (rege6.find()) {
-            String[] separaNumero = rege6.group().toString().replace("-", "").split("º|°");
-            IdPortaria = separaNumero[1].toString().trim();
-        }
-        
-
-        
-        if (rege7.find()) {
-            String[] separaNumero = rege7.group().split("°|º");
-            separaNumero = separaNumero[1].split(" ");
-            IdPortaria = separaNumero[0].toString().trim();
-        }
-        if (rege8.find()) {
-            String[] separaNumero = rege8.group().split("°|º");
-            separaNumero = separaNumero[1].split(" ");
-            IdPortaria = separaNumero[0].toString().trim();
-        }
-        if (rege9.find()) {
-            String[] separaNumero = rege9.group().split("°|º");
-            separaNumero = separaNumero[1].split(",");
-            IdPortaria = separaNumero[0].toString().trim();
-        }
-        if (rege10.find()) {
-            String[] separaNumero = rege10.group().split("°|º");
-            separaNumero = separaNumero[1].split("D");
-            IdPortaria = separaNumero[0].toString().trim();
-        }
+        IdPortaria = PegandoValores.VerificaExpressoes(expressoes, text);
 
         return IdPortaria;
     }
@@ -205,6 +131,7 @@ public class Nova_Convert_XML {
     }
 
     public void begin(String src, String dest) throws FileNotFoundException, IOException {
+        ArrayList<String> expressoes = LeExpressoesRegularesTxt();
 
         in = new BufferedReader(new FileReader(src));
         FileWriter savefile = new FileWriter(new File(dest));
@@ -233,6 +160,7 @@ public class Nova_Convert_XML {
         int fimt = 0;
         int proximoLinha = 0;
         while ((str = in.readLine()) != null) {
+            str = str.trim();
             Element portaria = new Element("portaria");
             Element text = new Element("text");
             if (escreve == false) {
@@ -247,11 +175,11 @@ public class Nova_Convert_XML {
             }
 
             if (escreve == true) {
-                
-                if(IdPortaria.length() <= 0){
-                    IdentPortaria(str);
+
+                if (IdPortaria.length() <= 0) {
+                    IdentPortaria(expressoes, str);
                 }
-                
+
                 Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
                         + "|Pró-Reitora|Pró-Reitor|Diretor Geral|Diretor-Geral|Vice-Pró-Reitora|Vice-Pró-Reitor|Vice-Superintendente|VICE-REITOR"
                         + "|Vice-Superintendente|Reitor|VICE-REITORA|Diretor|Diretora da Faculdade|(^)End_New_Official");
@@ -262,8 +190,9 @@ public class Nova_Convert_XML {
                         portaria.setAttribute("ID", IdPortaria);
                         portaria.setAttribute("data", "" + DatPort + "");
                         linhas.add(str);
-                        String dados = linhas.toString().replace("[", "");
-                        String dados_1 = dados.replace("]", "");
+
+                        String dados_1 = FormataTexto(linhas);
+
                         text.setText(dados_1);
                         linhas.removeAll(linhas);
                         portaria.addContent(text);
@@ -288,8 +217,8 @@ public class Nova_Convert_XML {
                     portaria.setAttribute("ID", IdPortaria);
                     portaria.setAttribute("data", "" + DatPort + "");
                     linhas.add(str);
-                    String dados = linhas.toString().replace("[", "");
-                    String dados_1 = dados.replace("]", "");
+
+                    String dados_1 = FormataTexto(linhas);
                     text.setText(dados_1);
                     linhas.removeAll(linhas);
                     portaria.addContent(text);
@@ -310,8 +239,9 @@ public class Nova_Convert_XML {
                     portaria.setAttribute("ID", IdPortaria);
                     portaria.setAttribute("data", "" + DatPort + "");
                     linhas.add(str);
-                    String dados = linhas.toString().replace("[", "");
-                    String dados_1 = dados.replace("]", "");
+
+                    String dados_1 = FormataTexto(linhas);
+
                     text.setText(dados_1);
                     linhas.removeAll(linhas);
                     portaria.addContent(text);
@@ -339,6 +269,23 @@ public class Nova_Convert_XML {
         XMLOutputter saveXML = new XMLOutputter();
         saveXML.output(Doc, savefile);
 
+    }
+
+    public static String FormataTexto(ArrayList<String> linhas) throws UnsupportedEncodingException {
+        byte[] bytes = linhas.toString().getBytes();
+        String dados = new String(bytes, "UTF-8");
+
+        dados = dados.replace("[", "");
+        dados = dados.replace("]", "");
+
+        while (dados.contains(", ,") || dados.contains(",,")) {
+            dados = dados.replaceAll(", ,", ",");
+            dados = dados.replaceAll(",,", ",");
+        }
+
+        dados = dados.trim();
+
+        return dados;
     }
 
     public static void main(String[] args) throws IOException {

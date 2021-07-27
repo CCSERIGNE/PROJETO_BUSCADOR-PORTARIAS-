@@ -18,16 +18,13 @@ import static sun.management.Agent.error;
 
 /**
  *
- * @author Serigne Khassim Mbaye 
- * Estudante Ciênça da computação
- * Email : serignekhassim@gmail.com
- * 19-09-2020 -  IBIRUBA - RS IFRS
+ * @author Serigne Khassim Mbaye Estudante Ciênça da computação Email :
+ * serignekhassim@gmail.com 19-09-2020 - IBIRUBA - RS IFRS
  */
-
 public class PDF2TXT {
-    
+
     public static void Open_Dir(String tipoSite) throws IOException {
-        System.setProperty("user.dir",VarivaisGlobais.SRCARCH);
+        System.setProperty("user.dir", VarivaisGlobais.SRCARCH);
         File dir = new File(System.getProperty("user.dir"));
 
         String childs[] = dir.list();
@@ -37,50 +34,54 @@ public class PDF2TXT {
             String DEST_F = VarivaisGlobais.DEST + "" + nomeTXT.toString().trim() + ".txt";
             File file = new File(DEST_F);
             file.getParentFile().mkdirs();
-           
-            LerArquivo(SRC_F , DEST_F, tipoSite);
+
+            LerArquivo(SRC_F, DEST_F, tipoSite);
         }
     }
-    
-    public static void LerArquivo(String src , String dest , String tipoSite){
-         try {  
-            String pdfFile = src;             
-             System.out.println("des : "+dest);
-            File filePDF = new File(pdfFile);  
-            FileInputStream fileInputStream = new FileInputStream(filePDF);  
+
+    public static void LerArquivo(String src, String dest, String tipoSite) {
+        try {
+            String pdfFile = src;
+            System.out.println("des : " + dest);
+            File filePDF = new File(pdfFile);
+            FileInputStream fileInputStream = new FileInputStream(filePDF);
             BufferedWriter buffWrite = new BufferedWriter(new FileWriter(dest));
-            PDDocument pdfDocument = null;  
-            try {  
-                PDFParser parser = new PDFParser(fileInputStream);  
-                parser.parse();  
-                pdfDocument = parser.getPDDocument();  
+            PDDocument pdfDocument = null;
+
+            try {
+                PDFParser parser = new PDFParser(fileInputStream);
+                parser.parse();
+                pdfDocument = parser.getPDDocument();
                 PDFTextStripper stripper = new PDFTextStripper();
-                switch(tipoSite){
+
+                String textoPDF = stripper.getText(pdfDocument);
+                String textoPadronizado = PreProcessadores.PadronizarTxt(textoPDF);
+
+                switch (tipoSite) {
                     case "novo":
-                        buffWrite.append(stripper.getText(pdfDocument).concat("End_New_Official"));
-                    break;
+                        buffWrite.append(textoPadronizado.concat("End_New_Official"));
+                        break;
                     default:
-                        buffWrite.append(stripper.getText(pdfDocument));
-                    break;
+                        buffWrite.append(textoPadronizado);
+                        break;
                 }
-                
+
                 buffWrite.close();
-            } finally {  
-                if (pdfDocument != null) {  
-                    try {  
-                        pdfDocument.close();  
-                    } catch (IOException e) {}  
-                }  
-            }  
-        } catch (IOException e) {  
+            } finally {
+                if (pdfDocument != null) {
+                    try {
+                        pdfDocument.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
+        } catch (IOException e) {
             error(e.toString());
         }
-    } 
-    
+    }
+
     public static void main(String[] args) throws IOException {
         VarivaisGlobais.setTiposite("novo");
         Open_Dir(VarivaisGlobais.getTiposite());
-    }  
+    }
 }
-    
- 
