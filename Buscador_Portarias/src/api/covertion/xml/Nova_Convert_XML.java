@@ -46,8 +46,8 @@ public class Nova_Convert_XML {
         for (String SplitnomeArchiv : childs) {
 
             String nomeTXT[] = SplitnomeArchiv.split(".txt");
-            String SRC_F = VarivaisGlobais.SRCARCH + "" + SplitnomeArchiv.toString().trim();
-            String DEST_F = VarivaisGlobais.DEST + "" + nomeTXT[0].toString().trim() + ".xml";
+            String SRC_F = VarivaisGlobais.SRCARCH + "" + SplitnomeArchiv.trim();
+            String DEST_F = VarivaisGlobais.DEST + "" + nomeTXT[0].trim() + ".xml";
 
             nomeArquivo = nomeTXT[0];
             numPort = n++;
@@ -82,6 +82,7 @@ public class Nova_Convert_XML {
         int fimt = 0;
         int proximoLinha = 0;
         while ((str = in.readLine()) != null) {
+//            System.out.println(str);
             str = str.trim();
             Element portaria = new Element("portaria");
             Element text = new Element("text");
@@ -115,7 +116,7 @@ public class Nova_Convert_XML {
                         linhas.add(str);
 
                         String dados_1 = FormataTexto(linhas);
-
+                        
                         text.setText(dados_1);
                         linhas.removeAll(linhas);
                         portaria.addContent(text);

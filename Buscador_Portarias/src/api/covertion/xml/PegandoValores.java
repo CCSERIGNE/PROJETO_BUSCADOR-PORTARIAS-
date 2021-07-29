@@ -56,14 +56,18 @@ public class PegandoValores {
     public static String VerificaExpressoes(String text) throws IOException {
         text = text.toUpperCase();
 
+        String numeroEncontrado = "";
         for (int i = 0; i < expressoes.size() - 1; i++) {
             Pattern pattern = Pattern.compile(expressoes.get(i));
             Matcher matcher = pattern.matcher(text);
+
             if (matcher.find()) {
-                return matcher.group(1);
+                numeroEncontrado = matcher.group(1);
+                break;
             }
         }
-        return "";
+
+        return numeroEncontrado;
     }
 
     public static String IdentPortaria(String text) throws FileNotFoundException, IOException {
@@ -78,7 +82,7 @@ public class PegandoValores {
             String[] dat;
             if (text.contains(",")) {
                 dat = text.split(",");
-                datPort = dat[1].toString().trim();
+                datPort = dat[1].trim();
             } else if (text.contains("de")) {
                 dat = text.split("de");
                 int h;
@@ -86,7 +90,7 @@ public class PegandoValores {
                     dat = text.split("DIA");
                 }
                 for (h = 1; h < dat.length; h++) {
-                    datPort = dat[h].toString().trim();
+                    datPort = dat[h].trim();
                 }
             } else if (text.contains("DE")) {
                 dat = text.split("DE");
@@ -94,13 +98,13 @@ public class PegandoValores {
                 if (text.contains("DIA")) {
                     dat = text.split("DIA");
                     for (m = 1; m < dat.length; m++) {
-                        datPort = dat[m].toString().trim();
+                        datPort = dat[m].trim();
                     }
                 } else {
-                    String dtpor = dat[m].toString().trim();
+                    String dtpor = dat[m].trim();
                     for (m = 2; m < dat.length; m++) {
-                        dtpor = dtpor + " " + dat[m].toString().trim();
-                        datPort = dtpor.toString();
+                        dtpor = dtpor + " " + dat[m].trim();
+                        datPort = dtpor;
                     }
                 }
             }
