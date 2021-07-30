@@ -1,4 +1,5 @@
-(^)PORTARIA N (.*?) 
-Nº\s*(.*?)\s*[-|–]
-PORTARIA Nº\s*(.*?),* [DO DIA|DE]
-Nº (.*?)+/[a-zA-Z]{3}+/[0-9]{4}
+^PORTARIA N (.*)? 
+^Nº\s*(.*)?\s*[-|–]
+^PORTARIA Nº\s*(.*)?,* [DO DIA|DE]
+^Nº (.*)?+/[a-zA-Z]{3}+/[0-9]{4}
+^Nº (.*)?,

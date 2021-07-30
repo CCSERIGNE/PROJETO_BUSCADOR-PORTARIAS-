@@ -33,9 +33,11 @@ public class PreProcessadores {
             texto = texto.replaceAll("  ", " ");
         }
 
+        texto = texto.replaceAll(" ,", ":");
         texto = texto.replaceAll("°", "º");
         texto = texto.replaceAll("N º", "Nº");
         texto = texto.replaceAll("n º", "nº");
+        texto = texto.replaceAll(":,", ":");
 
         return texto;
     }
