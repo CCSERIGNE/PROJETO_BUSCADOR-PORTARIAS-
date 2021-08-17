@@ -56,18 +56,26 @@ public class PegandoValores {
     public static String VerificaExpressoes(String text) throws IOException {
         text = text.toUpperCase();
 
-        String numeroEncontrado = "";
+        String numeroId = "";
         for (int i = 0; i < expressoes.size() - 1; i++) {
             Pattern pattern = Pattern.compile(expressoes.get(i));
             Matcher matcher = pattern.matcher(text);
 
             if (matcher.find()) {
-                numeroEncontrado = matcher.group(1);
-                break;
+                String numeroEncontrado = matcher.group(1);
+
+                if (numeroId.length() == 0 || (numeroEncontrado.length() < numeroId.length())) {
+                    System.out.println(text);
+                    System.out.println(numeroEncontrado);
+                    System.out.println(numeroId);
+
+                    numeroId = numeroEncontrado;
+
+                }
             }
         }
 
-        return numeroEncontrado;
+        return numeroId;
     }
 
     public static String IdentPortaria(String text) throws FileNotFoundException, IOException {

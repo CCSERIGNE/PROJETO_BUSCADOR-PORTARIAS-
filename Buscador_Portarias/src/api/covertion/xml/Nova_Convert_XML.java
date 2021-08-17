@@ -152,7 +152,7 @@ public class Nova_Convert_XML {
                         VarivaisGlobais.QtdSemData++;
                     }
                     if (IdPortaria.equals("")) {
-                        System.out.println(nomeArquivo);
+                        // System.out.println(nomeArquivo);
                         VarivaisGlobais.QtdSemNumero++;
                     }
                     DatPort = "";

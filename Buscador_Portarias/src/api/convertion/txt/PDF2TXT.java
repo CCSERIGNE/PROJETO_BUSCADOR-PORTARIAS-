@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
@@ -55,7 +56,10 @@ public class PDF2TXT {
                 PDFTextStripper stripper = new PDFTextStripper();
 
                 String textoPDF = stripper.getText(pdfDocument);
-                String textoPadronizado = PreProcessadores.PadronizarTxt(textoPDF);
+
+                byte[] textoBytes = textoPDF.getBytes();
+                String textoUTF = new String(textoBytes, StandardCharsets.UTF_8);
+                String textoPadronizado = PreProcessadores.PadronizarTxt(textoUTF);
 
                 switch (tipoSite) {
                     case "novo":
