@@ -33,7 +33,8 @@ public class PreProcessadores {
             texto = texto.replaceAll("  ", " ");
         }
 
-        texto = texto.replaceAll("[^\\x20-\\x7e]", "");
+
+        texto = texto.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
         texto = texto.replaceAll(" ,", ":");
         texto = texto.replaceAll("°", "º");
         texto = texto.replaceAll("N º", "Nº");
