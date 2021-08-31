@@ -21,54 +21,76 @@ import java.util.regex.Pattern;
  */
 public class PegandoValores {
 
-    static ArrayList<String> expressoes;
+    static ArrayList<String> expressoesNumero;
+    static ArrayList<String> expressoesData;
 
     static {
         try {
-            expressoes = LeExpressoesRegularesTxt();
+            expressoesNumero = LeExpressoesRegularesNumeroTxt();
+            expressoesData = LeExpressoesRegularesDataTxt();
+
         } catch (IOException ex) {
             Logger.getLogger(PegandoValores.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static ArrayList<String> LeExpressoesRegularesTxt() throws IOException {
+    public static ArrayList<String> LeExpressoesRegularesNumeroTxt() throws IOException {
         String diretorio = System.getProperty("user.dir");
-        diretorio = diretorio.replace("Buscador_Portarias", "\\Arquivos\\expressoesRegulares.txt");
+        diretorio = diretorio.replace("Buscador_Portarias", "\\Arquivos\\expressoesRegularesNumero.txt");
         System.out.println("Expressões Regulares --> " + diretorio);
 
-        ArrayList<String> expressoesLista = new ArrayList<>();
+        ArrayList<String> expressoesNumeroLista = new ArrayList<>();
 
         try (BufferedReader buffRead = new BufferedReader(new FileReader(diretorio))) {
             String linha = "";
             while (true) {
                 if (linha != null) {
                     linha = buffRead.readLine();
-                    expressoesLista.add(linha);
+                    expressoesNumeroLista.add(linha);
                 } else {
                     break;
                 }
             }
         }
 
-        return expressoesLista;
+        return expressoesNumeroLista;
     }
 
-    public static String VerificaExpressoes(String text) throws IOException {
+    public static ArrayList<String> LeExpressoesRegularesDataTxt() throws IOException {
+        String diretorio = System.getProperty("user.dir");
+        diretorio = diretorio.replace("Buscador_Portarias", "\\Arquivos\\expressoesRegularesData.txt");
+        System.out.println("Expressões Regulares --> " + diretorio);
+
+        ArrayList<String> expressoesDataLista = new ArrayList<>();
+
+        try (BufferedReader buffRead = new BufferedReader(new FileReader(diretorio))) {
+            String linha = "";
+            while (true) {
+                if (linha != null) {
+                    linha = buffRead.readLine();
+                    expressoesDataLista.add(linha);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return expressoesDataLista;
+    }
+
+    public static String VerificaExpressoesNumero(String text) throws IOException {
         text = text.toUpperCase();
 
         String numeroId = "";
-        for (int i = 0; i < expressoes.size() - 1; i++) {
-            Pattern pattern = Pattern.compile(expressoes.get(i));
+        for (int i = 0; i < expressoesNumero.size() - 1; i++) {
+            
+            Pattern pattern = Pattern.compile(expressoesNumero.get(i));
             Matcher matcher = pattern.matcher(text);
 
             if (matcher.find()) {
                 String numeroEncontrado = matcher.group(1);
 
                 if (numeroId.length() == 0 || (numeroEncontrado.length() < numeroId.length())) {
-                    System.out.println(text);
-                    System.out.println(numeroEncontrado);
-                    System.out.println(numeroId);
-
                     numeroId = numeroEncontrado;
 
                 }
@@ -78,45 +100,34 @@ public class PegandoValores {
         return numeroId;
     }
 
-    public static String IdentPortaria(String text) throws FileNotFoundException, IOException {
+    // ATENÇÃO: As expressões regulares devem estar em ordem
+    public static String VerificaExpressoesData(String text) throws IOException {
+        text = text.toUpperCase();
+
+        String data = "";
+        for (int i = 0; i < expressoesData.size() - 1; i++) {
+            
+            Pattern pattern = Pattern.compile(expressoesData.get(i));
+            Matcher matcher = pattern.matcher(text);
+
+            if (matcher.find()) {
+                data = matcher.group(0);
+                break;
+            }
+        }
+
+        return data;
+    }
+
+    public static String GetNumeroPortaria(String text) throws FileNotFoundException, IOException {
         String idPortaria;
-        idPortaria = VerificaExpressoes(text);
+        idPortaria = VerificaExpressoesNumero(text);
         return idPortaria;
     }
 
-    public static String GetDAtePortaria(String text) {
-        String datPort = "";
-        if (text.contains(" ")) {
-            String[] dat;
-            if (text.contains(",")) {
-                dat = text.split(",");
-                datPort = dat[1].trim();
-            } else if (text.contains("de")) {
-                dat = text.split("de");
-                int h;
-                if (text.contains("DIA")) {
-                    dat = text.split("DIA");
-                }
-                for (h = 1; h < dat.length; h++) {
-                    datPort = dat[h].trim();
-                }
-            } else if (text.contains("DE")) {
-                dat = text.split("DE");
-                int m = 0;
-                if (text.contains("DIA")) {
-                    dat = text.split("DIA");
-                    for (m = 1; m < dat.length; m++) {
-                        datPort = dat[m].trim();
-                    }
-                } else {
-                    String dtpor = dat[m].trim();
-                    for (m = 2; m < dat.length; m++) {
-                        dtpor = dtpor + " " + dat[m].trim();
-                        datPort = dtpor;
-                    }
-                }
-            }
-        }
-        return datPort;
+    public static String GetDataPortaria(String text) throws IOException {
+        String idPortaria;
+        idPortaria = VerificaExpressoesData(text);
+        return idPortaria;
     }
 }

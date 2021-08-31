@@ -5,8 +5,8 @@
  */
 package api.covertion.xml;
 
-import static api.covertion.xml.PegandoValores.IdentPortaria;
-import static api.covertion.xml.PegandoValores.GetDAtePortaria;
+import static api.covertion.xml.PegandoValores.GetNumeroPortaria;
+import static api.covertion.xml.PegandoValores.GetDataPortaria;
 import api.variaveis.globais.VarivaisGlobais;
 import java.io.BufferedReader;
 import java.io.File;
@@ -95,13 +95,13 @@ public class Nova_Convert_XML {
                 if (rege.find()) {
                     escreve = true;
                     VarivaisGlobais.QtdPortarias++;
-                    DatPort = GetDAtePortaria(str);
+                    DatPort = GetDataPortaria(str);
                 }
             }
 
             if (escreve == true) {
                 if (IdPortaria.length() <= 0) {
-                    IdPortaria = IdentPortaria(str);
+                    IdPortaria = GetNumeroPortaria(str);
                 }
 
                 Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
