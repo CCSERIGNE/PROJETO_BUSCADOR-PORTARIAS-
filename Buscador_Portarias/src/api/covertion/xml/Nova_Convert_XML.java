@@ -106,7 +106,7 @@ public class Nova_Convert_XML {
 
                 Pattern p_2 = Pattern.compile("(^)Diretora Geral|Reitor Substituto|Diretora-Geral|\\(Presidente da CPAD|Reitor pro tempore|Vice-Reitora"
                         + "|Pró-Reitora|Pró-Reitor|Diretor Geral|Diretor-Geral|Vice-Pró-Reitora|Vice-Pró-Reitor|Vice-Superintendente|VICE-REITOR"
-                        + "|Vice-Superintendente|Reitor|VICE-REITORA|Diretor|Diretora da Faculdade|(^)End_New_Official");
+                        + "|Vice-Superintendente|Reitor|VICE-REITORA|Diretor|Diretora da Faculdade|Superintendente de Infraestrutura|Vice-Diretor|(^)End_New_Official");
                 Matcher rege_2 = p_2.matcher(str);
                 if (rege_2.lookingAt()) {
                     if (IdPortaria.length() > 0) {
@@ -116,7 +116,7 @@ public class Nova_Convert_XML {
                         linhas.add(str);
 
                         String dados_1 = FormataTexto(linhas);
-                        
+
                         text.setText(dados_1);
                         linhas.removeAll(linhas);
                         portaria.addContent(text);
