@@ -34,9 +34,11 @@ public class Buscador_Portarias {
         for (int i = 0; i < args.length; i++) {
 
             if (null != args[i].trim()) {
+                    
+                System.out.println(args[i]);
+                
                 switch (args[i].trim()) {
                     case "typSit":
-                        System.out.println(args[i + 1].trim());
                         VarivaisGlobais.setTiposite(args[i + 1].trim());
                         break;
                     case "dest":
@@ -93,6 +95,10 @@ public class Buscador_Portarias {
                 }
             }
         }
+    }
+
+    void main(String query_Edimar_Manica) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
