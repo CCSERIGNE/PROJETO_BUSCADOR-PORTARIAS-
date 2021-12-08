@@ -1,3 +1,4 @@
+^PORTARIA Nº (.*?)/
 ^Nº\s*(.*?)\s*[–|-]
 ^PORTARIA N (.*?)? 
 ^PORTARIA Nº (.*?)?,

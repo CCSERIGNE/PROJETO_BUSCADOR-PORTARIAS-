@@ -88,23 +88,23 @@ public class DownloadOficialNovo {
 
     public static void BaixoPortariasNovo() throws IOException {
         Calendar cal = Calendar.getInstance();
-        int anoPortarias = 2020; // Começaram a ser postadas em 2017
+        int anoPortarias = 2021; // Começaram a ser postadas em 2017
         int anoAtual = cal.get(Calendar.YEAR);
-
+        long tempoInicio = System.currentTimeMillis();
         ArrayList<String> ifrsLinks = new ArrayList<>();
-        ifrsLinks.add("ifce");;//        ifrsLinks.add("ifrs");
-        ifrsLinks.add("ifnmg");
+        ifrsLinks.add("ifrs");
+//        ifrsLinks.add("ifce");      
+//        ifrsLinks.add("ifnmg");
         //// ifrsLinks.add("ifsertao-pe"); // NÃO
-        ifrsLinks.add("IFBaiano");
-        ifrsLinks.add("ifal");
-        for (int i = 0; i < ifrsLinks.size(); i++) {
+//        ifrsLinks.add("IFBaiano");
+//        ifrsLinks.add("ifal");
+        for (String link : ifrsLinks) {
 
             while (anoPortarias <= anoAtual) {
-                VarivaisGlobais.SetDestinario("C:\\Users\\Igor\\Documents\\Portarias\\Sippag\\PDF\\" + ifrsLinks.get(i) + "\\" + anoPortarias + "\\");
-
-                String LinkAtual = "https://sippag-web." + ifrsLinks.get(i) + ".edu.br/api/v1/portaria?ano=" + anoPortarias + "&page=0&size=10000";
+                VarivaisGlobais.SetDestinario(VarivaisGlobais.getDestinario()+ "\\" + link + "\\" + anoPortarias + "\\");
+                String LinkAtual = "https://sippag-web." + link + ".edu.br/api/v1/portaria?ano=" + anoPortarias + "&page=0";
                 Response resp = Jsoup.connect(LinkAtual).method(Connection.Method.GET)
-                        .header("Host", "sippag-web." + ifrsLinks.get(i) + ".edu.br")
+                        .header("Host", "sippag-web." + link + ".edu.br")
                         .header("Connection", "keep-alive")
                         .header("Pragma", "no-cache")
                         .header("Cache-Control", "no-cache")
@@ -116,7 +116,7 @@ public class DownloadOficialNovo {
                         .header("Sec-Fetch-Site", "same-origin")
                         .header("Sec-Fetch-Mode", "cors")
                         .header("Sec-Fetch-Dest", "empty")
-                        .header("Referer", "https://sippag-web." + ifrsLinks.get(i) + ".edu.br/portarias/")
+                        .header("Referer", "https://sippag-web." + link + ".edu.br/portarias/")
                         .header("Accept-Encoding", "gzip, deflate, br")
                         .header("Accept-Language", "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7").ignoreContentType(true).execute();
                 
@@ -130,8 +130,9 @@ public class DownloadOficialNovo {
                 anoPortarias++;
 
             }
-
+            
         }
+        System.out.println("Tempo Total: "+(System.currentTimeMillis()-tempoInicio));
 
     }
 

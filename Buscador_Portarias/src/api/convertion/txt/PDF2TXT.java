@@ -23,9 +23,10 @@ import static sun.management.Agent.error;
  * serignekhassim@gmail.com 19-09-2020 - IBIRUBA - RS IFRS
  */
 public class PDF2TXT {
-
+   
     public static void Open_Dir(String tipoSite) throws IOException {
         System.setProperty("user.dir", VarivaisGlobais.SRCARCH);
+        System.setProperty("org.apache.pdfbox.baseParser.pushBackSize", "1499716");
         File dir = new File(System.getProperty("user.dir"));
 
         String childs[] = dir.list();
@@ -61,9 +62,9 @@ public class PDF2TXT {
                 String textoUTF = new String(textoBytes, StandardCharsets.UTF_8);
                 String textoPadronizado = PreProcessadores.PadronizarTxt(textoUTF);
 
-                switch (tipoSite) {
+                switch (tipoSite.toLowerCase()) {
                     case "novo":
-                        buffWrite.append(textoPadronizado.concat("End_New_Official"));
+                        buffWrite.append(textoPadronizado.concat("\nEnd_New_Official"));
                         break;
                     default:
                         buffWrite.append(textoPadronizado);
