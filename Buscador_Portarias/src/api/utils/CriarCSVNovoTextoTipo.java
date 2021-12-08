@@ -8,8 +8,10 @@ package api.utils;
 import static api.buscador.portarias.ConvertXML_doc.getdocXML;
 import api.convertion.csv.csv_exporter;
 import api.variaveis.globais.VarivaisGlobais;
+import buscador_portarias.TesteID;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import org.jdom2.Element;
@@ -23,14 +25,13 @@ import org.jsoup.Jsoup;
  *
  * @author Igor
  */
-public class CriarCSVNovo {
+public class CriarCSVNovoTextoTipo {
 
     private static final String URLBASE = "https://sippag-web.ifrs.edu.br/api/v1/portaria";
     private static final String ANO = "2021";
-    private static final String VISUALIZAR = "https://sippag.ifrs.edu.br/portarias/visualizar?";
     private static final String DIRETORIO = "C:\\Users\\Igor\\Documents\\Portarias\\Sippag\\XML\\ifrs\\2021\\";
 
-    public static void SalvaJson() throws IOException {
+    public static void SalvaJsonLinkNumeroURL() throws IOException {
 
         List<String[]> list = new ArrayList<>();
 
@@ -60,10 +61,12 @@ public class CriarCSVNovo {
                         String dia = ((JSONObject) date).get("day").toString();
                         String mes = ((JSONObject) date).get("month").toString();
                         String anoJson = ((JSONObject) date).get("year").toString();
+                        
+                        String tipoPortaria = ((JSONObject) object).get("tipoPortaria").toString();
 
-                        String dataFormatada = FormataData(dia, mes, anoJson);
+                        String dataFormatada = TesteID.FormataData(dia, mes, anoJson);
 
-                        String[] item = {url, numero, dataFormatada};
+                        String[] item = {url, numero, dataFormatada, tipoPortaria};
                         list.add(item);
 
                     }
@@ -105,55 +108,7 @@ public class CriarCSVNovo {
         }
     }
 
-    public static String FormataData(String dia, String mes, String ano) {
-        if (dia.startsWith("0")) {
-            dia = dia.replace("0", "");
-        }
-
-        String mesText = "";
-        switch (mes) {
-            case "01":
-                mesText = "JANEIRO";
-                break;
-            case "02":
-                mesText = "FEVEREIRO";
-                break;
-            case "03":
-                mesText = "MARÇO";
-                break;
-            case "04":
-                mesText = "ABRIL";
-                break;
-            case "05":
-                mesText = "MAIO";
-                break;
-            case "06":
-                mesText = "JUNHO";
-                break;
-            case "07":
-                mesText = "JULHO";
-                break;
-            case "08":
-                mesText = "AGOSTO";
-                break;
-            case "09":
-                mesText = "SETEMBRO";
-                break;
-            case "10":
-                mesText = "OUTUBRO";
-                break;
-            case "11":
-                mesText = "NOVEMBRO";
-                break;
-            case "12":
-                mesText = "DEZEMBRO";
-                break;
-        }
-        String dataFormatada = dia + " DE " + mesText + " DE " + ano;
-        return dataFormatada;
-    }
-
-    public static void SalvaXML() throws IOException {
+        public static void SalvaXMLLinkNumeroURL() throws IOException {
         System.out.println("Diretorio " + DIRETORIO);
         System.setProperty("user.dir", DIRETORIO);
         File dirf = new File(System.getProperty("user.dir"));
@@ -170,8 +125,17 @@ public class CriarCSVNovo {
             for (Element e : portarias) {
                 String ID = e.getAttributeValue("ID");
                 String dataPortaria = e.getAttributeValue("data");
+                
+                
+                List<Element> textElement = e.getChildren("text");
+                
+                String text = "";
+                for (Element t : textElement) {
+                    byte[] textoBytes = t.getText().getBytes();
+                    text = new String(textoBytes, StandardCharsets.UTF_8);
+                }
 
-                String[] item = {url, ID, dataPortaria};
+                String[] item = {url, ID, dataPortaria, text};
                 list.add(item);
             }
         }
@@ -182,7 +146,10 @@ public class CriarCSVNovo {
     public static void main(String[] args) throws IOException {
         // Atenção o JSON e o XML são baixados em uma ordem diferente
         // então no csv selecione todas as linhas e clique em classificar A-Z
-        SalvaXML();
-        SalvaJson();
+        // Você vai ver que a codificação está estranha. Para isso você deve fazer 
+        // Igual este video https://www.youtube.com/watch?v=eKCO6ibfT_w
+        // (Não encontrei nenhuma maneira de fazer isso diretamente)
+        SalvaXMLLinkNumeroURL();
+        SalvaJsonLinkNumeroURL();
     }
 }

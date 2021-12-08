@@ -6,9 +6,12 @@ package api.convertion.csv;
  * and open the template in the editor.
  */
 import com.opencsv.CSVWriter;
+import java.io.FileOutputStream;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -18,8 +21,16 @@ import java.util.List;
 public class csv_exporter {
 
     public static void saveCSV(List<String[]> list, String name) throws IOException {
+        String fileName = "C:\\Users\\Igor\\Documents\\Portarias\\Sippag\\CSV\\" + name + ".csv";
 
-        try (CSVWriter writer = new CSVWriter(new FileWriter("C:\\Users\\Igor\\Documents\\Portarias\\Sippag\\CSV\\" + name + ".csv"))) {
+        try (FileOutputStream fos = new FileOutputStream(fileName);
+                CSVWriter writer = new CSVWriter(
+                        new FileWriter(fileName, true),
+                        '|',
+                        CSVWriter.NO_QUOTE_CHARACTER,
+                        CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                        CSVWriter.DEFAULT_LINE_END)) {
+
             writer.writeAll(list);
         }
 
