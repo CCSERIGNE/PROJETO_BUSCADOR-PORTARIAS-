@@ -1,38 +1,37 @@
 package api.convertion.csv;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-import com.opencsv.CSVWriter;
-import java.io.FileOutputStream;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-/**
- *
- * @author Iago
- */
 public class csv_exporter {
 
-    public static void saveCSV(List<String[]> list, String name) throws IOException {
-        String fileName = "C:\\Users\\Igor\\Documents\\Portarias\\Sippag\\CSV\\" + name + ".csv";
+    public static ArrayList<String> organizeCSV(List<String[]> list) throws FileNotFoundException {
 
-        try (FileOutputStream fos = new FileOutputStream(fileName);
-                CSVWriter writer = new CSVWriter(
-                        new FileWriter(fileName, true),
-                        '|',
-                        CSVWriter.NO_QUOTE_CHARACTER,
-                        CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                        CSVWriter.DEFAULT_LINE_END)) {
+        ArrayList<String> listCSV = new ArrayList<>();
 
-            writer.writeAll(list);
+        for (String[] item : list) {
+            String csv = String.join(", ", item);
+
+            csv = csv.replaceAll("\\*", "");
+            csv = csv.replaceAll(". ", "");
+
+            listCSV.add(csv + System.lineSeparator());
         }
 
+        Collections.sort(listCSV);
+        return listCSV;
     }
+
+    public static void saveTXT(ArrayList<String> list, String name) throws FileNotFoundException {
+        try (PrintWriter out = new PrintWriter("C:\\Users\\Igor\\Documents\\Portarias\\Sippag\\CSV\\" + name + ".txt")) {
+            for (String item : list) {
+                out.write(item);
+            }
+        }
+    }
+
 }

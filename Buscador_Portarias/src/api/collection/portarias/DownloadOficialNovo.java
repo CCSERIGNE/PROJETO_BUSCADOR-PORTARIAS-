@@ -91,48 +91,53 @@ public class DownloadOficialNovo {
         int anoPortarias = 2021; // Começaram a ser postadas em 2017
         int anoAtual = cal.get(Calendar.YEAR);
         long tempoInicio = System.currentTimeMillis();
-        ArrayList<String> ifrsLinks = new ArrayList<>();
-        ifrsLinks.add("ifrs");
-//        ifrsLinks.add("ifce");      
-//        ifrsLinks.add("ifnmg");
-        //// ifrsLinks.add("ifsertao-pe"); // NÃO
-//        ifrsLinks.add("IFBaiano");
-//        ifrsLinks.add("ifal");
-        for (String link : ifrsLinks) {
+        ArrayList<String> ifInstituicoes = new ArrayList<>();
+//        ifInstituicoes.add("ifrs");
+//        ifInstituicoes.add("ifce");
+//        ifInstituicoes.add("ifnmg");
+        // ifInstituicoes.add("ifsertao-pe"); // NÃO
+//        ifInstituicoes.add("IFBaiano");
+        ifInstituicoes.add("ifal");
+        for (String link : ifInstituicoes) {
 
             while (anoPortarias <= anoAtual) {
-                VarivaisGlobais.SetDestinario(VarivaisGlobais.getDestinario()+ "\\" + link + "\\" + anoPortarias + "\\");
-                String LinkAtual = "https://sippag-web." + link + ".edu.br/api/v1/portaria?ano=" + anoPortarias + "&page=0";
-                Response resp = Jsoup.connect(LinkAtual).method(Connection.Method.GET)
-                        .header("Host", "sippag-web." + link + ".edu.br")
-                        .header("Connection", "keep-alive")
-                        .header("Pragma", "no-cache")
-                        .header("Cache-Control", "no-cache")
-                        .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36")
-                        .header("DNT", "1")
-                        .header("authorization", "null null")
-                        .header("content-type", "application/json")
-                        .header("Accept", "*/*")
-                        .header("Sec-Fetch-Site", "same-origin")
-                        .header("Sec-Fetch-Mode", "cors")
-                        .header("Sec-Fetch-Dest", "empty")
-                        .header("Referer", "https://sippag-web." + link + ".edu.br/portarias/")
-                        .header("Accept-Encoding", "gzip, deflate, br")
-                        .header("Accept-Language", "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7").ignoreContentType(true).execute();
-                
-          
-                try {
-                    JSONObject jsonObject = new JSONObject(resp.body());
-                    printJsonObject(jsonObject);
-                } catch (JSONException err) {
-                    System.out.println("Error" + err.toString());
-                }
-                anoPortarias++;
+                VarivaisGlobais.SetDestinario(VarivaisGlobais.getDestinario() + "\\" + link + "\\" + anoPortarias + "\\");
 
+                // ArrayList ddo java só armazena 200 itens, então temos que fazer uma paginacao
+                
+                for (int page = 0; page <= 3; page++) {
+
+                    String LinkAtual = "https://sippag-web." + link + ".edu.br/api/v1/portaria?ano=" + anoPortarias + "&page=" + page +"&size=2000";
+                    Response resp = Jsoup.connect(LinkAtual).method(Connection.Method.GET)
+                            .header("Host", "sippag-web." + link + ".edu.br")
+                            .header("Connection", "keep-alive")
+                            .header("Pragma", "no-cache")
+                            .header("Cache-Control", "no-cache")
+                            .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36")
+                            .header("DNT", "1")
+                            .header("authorization", "null null")
+                            .header("content-type", "application/json")
+                            .header("Accept", "*/*")
+                            .header("Sec-Fetch-Site", "same-origin")
+                            .header("Sec-Fetch-Mode", "cors")
+                            .header("Sec-Fetch-Dest", "empty")
+                            .header("Referer", "https://sippag-web." + link + ".edu.br/portarias/")
+                            .header("Accept-Encoding", "gzip, deflate, br")
+                            .header("Accept-Language", "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7").ignoreContentType(true).execute();
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(resp.body());
+                        printJsonObject(jsonObject);
+                    } catch (JSONException err) {
+                        System.out.println("Error" + err.toString());
+                    }
+                    anoPortarias++;
+
+                }
             }
-            
+
         }
-        System.out.println("Tempo Total: "+(System.currentTimeMillis()-tempoInicio));
+        System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
 
     }
 
