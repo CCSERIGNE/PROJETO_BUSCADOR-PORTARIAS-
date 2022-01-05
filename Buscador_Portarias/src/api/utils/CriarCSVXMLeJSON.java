@@ -28,7 +28,7 @@ public class CriarCSVXMLeJSON {
 //        this.ifInstituicoes.add("ifnmg"); //FEITO
 //        this.ifInstituicoes.add("ifsertao-pe"); // NÃO
 //        this.ifInstituicoes.add("IFBaiano");
-//        this.ifInstituicoes.add("ifal");
+//        this.ifInstituicoes.add("ifal"); // FEITO
     }
 
     private void getCSVs() throws IOException {
@@ -41,12 +41,12 @@ public class CriarCSVXMLeJSON {
         for (String instituto : ifInstituicoes) {
 
             csvJson = pegaJSONValores(instituto);
-            csv = csv_exporter.organizeCSV(csvJson);
+            csv = csv_exporter.organizeCSV(csvJson, "json");
             listAllCSVsJSON.addAll(csv);
             csv_exporter.saveTXT(csv, instituto + "-json");
 
             csvXml = pegaXMLvalores(instituto);
-            csv = csv_exporter.organizeCSV(csvXml);
+            csv = csv_exporter.organizeCSV(csvXml, "xml");
             listAllCSVsXML.addAll(csv);
             csv_exporter.saveTXT(csv, instituto + "-xml");
 
@@ -61,9 +61,10 @@ public class CriarCSVXMLeJSON {
 
         List<String[]> list = new ArrayList<>();
 
-        for (int page = 0; page <= 1; page++) {
+        //Se ultrapasssar o json dá erro, tem que sempre mudar para um valor que pegue todos
+        for (int page = 0; page <= 2; page++) {
 
-            String link = "https://sippag-web." + instituto + ".edu.br/api/v1/portaria" + "?ano=" + ANO + "&page="+ page +"&size=2000";
+            String link = "https://sippag-web." + instituto + ".edu.br/api/v1/portaria" + "?ano=" + ANO + "&page=" + page + "&size=1999";
 
             JSONObject jsonObject = pegaJSON(link);
             for (Object key : jsonObject.keySet()) {

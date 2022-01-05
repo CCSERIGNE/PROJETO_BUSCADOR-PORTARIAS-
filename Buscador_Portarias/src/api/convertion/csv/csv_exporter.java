@@ -9,17 +9,28 @@ import java.util.List;
 
 public class csv_exporter {
 
-    public static ArrayList<String> organizeCSV(List<String[]> list) throws FileNotFoundException {
+    public static ArrayList<String> organizeCSV(List<String[]> list, String type) throws FileNotFoundException {
 
         ArrayList<String> listCSV = new ArrayList<>();
 
         for (String[] item : list) {
-            String csv = String.join(", ", item);
+            // String csv = String.join(",, ", item); // Fica só uma virgula no txt
 
-            csv = csv.replaceAll("\\*", "");
-            csv = csv.replaceAll(". ", "");
+            String itemCSV = "";
+            for (int i = 0; i < item.length; i++) {
+                String partCSV = item[i];
+                if (i == item.length - 1 && type.equals("json")) {
+                    partCSV = partCSV.replaceAll("\\.", "");
+                    partCSV = partCSV.replaceAll("\\*", "");
+                    partCSV = partCSV.trim();
+                }
+                if (i != item.length - 1) {
+                    partCSV += ", ";
+                }
+                itemCSV += partCSV;
+            }
 
-            listCSV.add(csv + System.lineSeparator());
+            listCSV.add(itemCSV + System.lineSeparator());
         }
 
         Collections.sort(listCSV);

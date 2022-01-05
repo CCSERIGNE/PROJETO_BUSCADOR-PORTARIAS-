@@ -93,21 +93,20 @@ public class DownloadOficialNovo {
         long tempoInicio = System.currentTimeMillis();
         ArrayList<String> ifInstituicoes = new ArrayList<>();
 //        ifInstituicoes.add("ifrs");
-//        ifInstituicoes.add("ifce");
+        ifInstituicoes.add("ifce");
 //        ifInstituicoes.add("ifnmg");
-        // ifInstituicoes.add("ifsertao-pe"); // NÃO
+//          ifInstituicoes.add("ifsertao-pe"); // NÃO
 //        ifInstituicoes.add("IFBaiano");
-        ifInstituicoes.add("ifal");
+//        ifInstituicoes.add("ifal");
         for (String link : ifInstituicoes) {
 
             while (anoPortarias <= anoAtual) {
                 VarivaisGlobais.SetDestinario(VarivaisGlobais.getDestinario() + "\\" + link + "\\" + anoPortarias + "\\");
 
                 // ArrayList ddo java só armazena 200 itens, então temos que fazer uma paginacao
-                
                 for (int page = 0; page <= 3; page++) {
 
-                    String LinkAtual = "https://sippag-web." + link + ".edu.br/api/v1/portaria?ano=" + anoPortarias + "&page=" + page +"&size=2000";
+                    String LinkAtual = "https://sippag-web." + link + ".edu.br/api/v1/portaria?ano=" + anoPortarias + "&page=" + page + "&size=1999";
                     Response resp = Jsoup.connect(LinkAtual).method(Connection.Method.GET)
                             .header("Host", "sippag-web." + link + ".edu.br")
                             .header("Connection", "keep-alive")
